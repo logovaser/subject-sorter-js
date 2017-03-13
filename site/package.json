@@ -1,0 +1,22 @@
+{
+  "name": "MyCoGa",
+  "version": "0.0.1",
+  "description": "MyCoGa web app",
+  "author": "Kiway",
+  "contributors": [
+    {
+      "name": "Artem Prudnikov",
+      "email": "a.prudnikov@kit-xxi.com.ua"
+    }
+  ],
+  "devDependencies": {
+    "angular": "latest",
+    "css-loader": "latest",
+    "less": "latest",
+    "less-loader": "latest",
+    "style-loader": "latest",
+    "file-loader": "latest",
+    "webpack": "latest",
+    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
+  }
+}

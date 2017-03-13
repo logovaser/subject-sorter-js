@@ -1,0 +1,34 @@
+<h3>Розклад на {{ date_show }}<button type="button" ng-click="delSchedule()">x</button></h3>
+
+<div class="controls">
+    <button type="button" ng-click="addPair()">Додати пару</button>
+    <select ng-model="platoonToAdd">
+        <option ng-repeat="platoon in availablePlatoons" ng-value="platoon">{{platoon.number}}</option>
+    </select>
+    <button type="button" ng-click="addPlatoon()">Додати взвод</button>
+    <button type="button" ng-click="btnSortClick()">Сортувати</button>
+</div>
+<table class="schedule-table">
+    <thead>
+    <tr>
+        <th></th>
+        <th ng-repeat="item in grid[0]" class="pair">
+            <b>{{ item.platoon.number }}</b>
+            <button type="button" ng-click="delPlatoon(item.platoon)">x</button>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in grid">
+        <td class="pair-number">
+            <b>{{ row[0].lesson.number }}</b>
+            <button type="button" ng-click="delPair(row[0].lesson.number)">x</button>
+        </td>
+        <td ng-repeat="item in row" class="pair">
+            <lesson lesson="item.lesson"
+                    ng-click="lessonClick(item)"
+                    ng-class="item.isSelected ? 'selected' : ''"></lesson>
+        </td>
+    </tr>
+    </tbody>
+</table>

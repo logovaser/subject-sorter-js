@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Subject sorter</title>
+    <script src="static/index.js"></script>
+</head>
+<body ng-app="subSortApp">
+
+<div ng-controller="scheduleCtrl">
+
+    <div class="nav">
+        <form class="date-picker" ng-submit="loadSchedule($event)">
+            <label for="sch-date-start">від</label>
+            <input id="sch-date-start" type="date" ng-model="tab.dt_start">
+            <label for="sch-date-end">до</label>
+            <input id="sch-date-end" type="date" ng-model="tab.dt_end">
+            <button>Завантажити</button>
+        </form>
+        <div class="separator"></div>
+        <form class="date-picker" ng-submit="addSchedule($event)">
+            <input type="date" ng-model="tab.dt_new_sch">
+            <button>Створити</button>
+        </form>
+        <div class="separator"></div>
+        <button type="button" ng-click="addTab()">Додати вкладку</button>
+    </div>
+    <br>
+
+    <schedule ng-repeat="day in days" date="day.date"></schedule>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+
+# MongoDB
+mongod --dbpath="D:\mongo"
+

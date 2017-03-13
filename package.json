@@ -1,0 +1,12 @@
+{
+  "name": "NodeRest",
+  "version": "0.0.1",
+  "author": "logovaser",
+  "dependencies": {
+    "express": "latest",
+    "mongoose": "latest",
+    "body-parser": "latest",
+    "express-ws": "latest",
+    "path": "latest"
+  }
+}
