@@ -61,6 +61,7 @@ export default ['dataFactory', function (dataFactory) {
         scope.buffer = {
             lesson: {}
         };
+        scope.pairToAdd = 1;
         scope.platoonToAdd = false;
 
         scope.pairs = [];
@@ -103,7 +104,7 @@ export default ['dataFactory', function (dataFactory) {
         }
 
         scope.$watch(scope.date, () => {
-            let newDate = new Date(scope.date);
+            let newDate = new Date(scope.date * 1000);
             scope.date_show = newDate.toLocaleDateString('ru');
             console.log(newDate.toLocaleDateString('ru'));
         });
@@ -137,10 +138,9 @@ export default ['dataFactory', function (dataFactory) {
         };
 
         scope.addPair = function () {
-            let number = parseInt(prompt('Введіть номер пари'));
-            if (scope.pairs.includes(number)) alert('Ця пара вже додана');
-            else if (number) {
-                scope.pairs.push(number);
+            if (scope.pairs.includes(scope.pairToAdd)) alert('Ця пара вже додана');
+            else if (scope.pairToAdd) {
+                scope.pairs.push(scope.pairToAdd);
                 initGrid();
             }
         };
@@ -178,7 +178,12 @@ export default ['dataFactory', function (dataFactory) {
         };
 
         scope.btnSortClick = function () {
-            dataFactory.sortLessons(getAllLessonsFromGrid(scope.grid))
+            // scope.btnSaveClick();
+            dataFactory.sortLessons(scope.date)
+        };
+
+        scope.btnSaveClick = function () {
+            getAllLessonsFromGrid(scope.grid).forEach(lesson => dataFactory.saveLesson(lesson))
         };
     };
 
