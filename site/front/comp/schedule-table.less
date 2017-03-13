@@ -1,4 +1,23 @@
+
+schedule {
+  display: block;
+  background: #74AF96;
+}
+
 .schedule-table {
+  border-spacing: 0;
+
+  .tr {
+
+    &:nth-child(2n) {
+      background: #F7F3E9;
+    }
+
+    &:nth-child(2n+1) {
+      background: #D5E1DD;
+    }
+  }
+
   .pair {
     min-width: 15em;
     max-width: 15em;

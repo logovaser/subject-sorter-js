@@ -21,6 +21,15 @@ export default ['$http', 'dataFactory', function ($http, dataFactory) {
         scope.availableLessonTypes = dataFactory.getLessonTypes();
         scope.avaliableTeachers = dataFactory.getTeachers();
 
+        scope.delLesson = function () {
+            let tempLesson = {
+                number: scope.lesson.number,
+                date: scope.lesson.date,
+                teachers: [],
+                platoons: scope.lesson.platoons,
+            };
+            angular.copy(tempLesson, scope.lesson);
+        }
     };
 
     return {

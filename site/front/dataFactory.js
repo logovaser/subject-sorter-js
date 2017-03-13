@@ -170,7 +170,7 @@ export default ['$http', function ($http) {
         else return;
 
         return $http.get(url).then(jsonData => {
-            jsonData.data.forEach(day => day.date *= 1000);
+            jsonData.data.forEach(day => day.date);
             angular.copy(jsonData.data, data.days);
             events.dispatchEvent(onCollectionChanged);
         });
@@ -192,9 +192,17 @@ export default ['$http', function ($http) {
 
     initLists();
 
-    function sortLessons(lessons) {
-        return $http.post(`${baseUrl}/lessons/prediction`, lessons).then(jsonData => {
-            data.lessons = jsonData;
+    function sortLessons(date) {
+        let day = data.days.find(day => day.date == date);
+        let lessons = day.lessons;
+        let tempLessons = lessons.map(lesson => lesson.id);
+        console.log(JSON.stringify(tempLessons));
+        $.ajax(`${baseUrl}/lessons/prediction`, {
+            type: 'POST',
+            data: JSON.stringify(tempLessons),
+            contentType: 'text/plain',
+        }).done(jsonData => {
+            day.lessons = jsonData.lessons;
             events.dispatchEvent(onCollectionChanged);
         });
     }
@@ -202,11 +210,22 @@ export default ['$http', function ($http) {
     function addLesson(date, lesson) {
         let lessons = getLessons(date);
         lessons.push(lesson);
+        let tempLesson = angular.copy(lesson);
         $.ajax(`${baseUrl}/lessons/add`, {
             type: 'POST',
-            data: JSON.stringify(lesson),
-            dataType: 'json',
+            data: JSON.stringify(tempLesson),
+            contentType: 'text/plain',
         }).done(jsonData => lesson.id = jsonData.id);
+    }
+
+    function saveLesson(lesson) {
+        let tempLesson = angular.copy(lesson);
+        console.log(JSON.stringify(tempLesson));
+        $.ajax(`${baseUrl}/lessons/save`, {
+            type: 'POST',
+            data: JSON.stringify(tempLesson),
+            contentType: 'text/plain',
+        });
     }
 
     function delLesson(lesson) {
@@ -260,6 +279,7 @@ export default ['$http', function ($http) {
         fetchDays,
 
         sortLessons,
+        saveLesson,
 
         addLesson,
         addDay,
