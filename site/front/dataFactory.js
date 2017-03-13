@@ -7,7 +7,7 @@ import Helpers from './helpers'
 
 export default ['$http', function ($http) {
 
-    let baseUrl = 'http://192.168.1.10/app_dev.php';
+    let baseUrl = 'http://192.168.1.111/app_dev.php';
 
     let data = {
         teachers: [],
