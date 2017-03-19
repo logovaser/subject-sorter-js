@@ -1,0 +1,25 @@
+@import "../_colors";
+@import "../_flexMixin";
+
+schedule {
+  display: block;
+  background: @colGray;
+  padding: 10px;
+  overflow: auto;
+}
+
+.schedule-nav {
+  .flex-display();
+  .flex-wrap(wrap);
+  .align-items(center);
+  padding: 10px;
+}
+
+.schedule-nav-title {
+}
+
+.schedule-nav-controls {
+  .flex-grow(1);
+  .flex-display();
+  .justify-content(flex-end)
+}

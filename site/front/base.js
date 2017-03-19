@@ -3,6 +3,7 @@
  */
 
 import angular from 'angular'
+import 'bootstrap/dist/css/bootstrap.css'
 import './fonts/Roboto-Regular.less'
 import './base.less'
 import dataFactory from './dataFactory'

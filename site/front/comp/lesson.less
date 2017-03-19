@@ -1,7 +1,19 @@
+@import "../_colors";
+
 lesson {
   display: block;
   border: 2px solid #e8e8e8;
+  transition: border .5s ease;
   position: relative;
+
+  .btn-close {
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  &:hover .btn-close {
+    opacity: 1;
+  }
 
   .lesson-content {
     width: 100%;

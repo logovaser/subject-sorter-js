@@ -11,6 +11,7 @@
   ],
   "devDependencies": {
     "jquery": "latest",
+    "bootstrap": "latest",
     "angular": "latest",
     "css-loader": "latest",
     "less": "latest",

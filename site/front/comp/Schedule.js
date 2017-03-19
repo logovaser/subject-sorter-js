@@ -2,6 +2,7 @@
  * Created by logov on 07-Mar-17.
  */
 
+import './schedule.less'
 import './schedule-table.less'
 import Helpers from '../helpers'
 
@@ -104,7 +105,7 @@ export default ['dataFactory', function (dataFactory) {
         }
 
         scope.$watch(scope.date, () => {
-            let newDate = new Date(scope.date * 1000);
+            let newDate = new Date(scope.date);
             scope.date_show = newDate.toLocaleDateString('ru');
             console.log(newDate.toLocaleDateString('ru'));
         });

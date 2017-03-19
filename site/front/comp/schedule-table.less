@@ -1,8 +1,4 @@
-
-schedule {
-  display: block;
-  background: #74AF96;
-}
+@import "../_colors";
 
 .schedule-table {
   border-spacing: 0;
@@ -10,11 +6,11 @@ schedule {
   .tr {
 
     &:nth-child(2n) {
-      background: #F7F3E9;
+      background: @colLight1;
     }
 
     &:nth-child(2n+1) {
-      background: #D5E1DD;
+      background: @colLight2;
     }
   }
 
@@ -23,8 +19,30 @@ schedule {
     max-width: 15em;
   }
 
+  th.pair {
+    padding: 2px;
+
+    .btn-close {
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    &:hover .btn-close {
+      opacity: 1;
+    }
+  }
+
   .pair-number {
     min-width: 5em;
     max-width: 5em;
+
+    .btn-close {
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    &:hover .btn-close {
+     opacity: 1;
+    }
   }
 }
