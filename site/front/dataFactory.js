@@ -2,144 +2,19 @@
  * Created by logov on 12-Mar-17.
  */
 
-import $ from 'jquery'
 import Helpers from './helpers'
 
 export default ['$http', function ($http) {
 
-    let baseUrl = 'http://968c3d75.ngrok.io/app.php';
+    let baseUrl = 'http://fbc37584.ngrok.io/app.php';
 
     let data = {
-        // teachers: [],
-        // subjects: [],
-        // platoons: [],
-        // lesson_types: [],
-        // lessons: [],
-        // days: [],
-
-        teachers: [
-            {
-                id: '1',
-                first_name: "name",
-                middle_name: "middlename",
-                surname: "Канюка",
-                methodical_day: {"day": "monday"},
-                subjects: [{"id": "2"},]
-            },
-            {
-                id: '2',
-                first_name: "name",
-                middle_name: "middlename",
-                surname: "Бєх",
-                methodical_day: {"day": "monday"},
-                subjects: [{"id": "2"},]
-            },
-            {
-                id: '3',
-                first_name: "name",
-                middle_name: "middlename",
-                surname: "Маркелов",
-                methodical_day: {"day": "monday"},
-                subjects: [{"id": "2"},]
-            },
-        ],
-        subjects: [
-            {id: '2', name: 'subject 1'}
-        ],
-        platoons: [
-            {id: '1', number: '531'},
-            {id: '2', number: '532'},
-            {id: '3', number: '533'},
-            {id: '4', number: '534'},
-            {id: '5', number: '511'},
-        ],
-        lesson_types: [
-            {id: '4', name: 'lesson_type 1'}
-        ],
-        days: [
-            {
-                date: Date.now(),
-                lessons: [
-                    {
-                        id: 1,
-                        subject: 2,
-                        number: 1,
-                        type: 4,
-                        teachers: [1],
-                        platoons: [3],
-                        room: 123,
-                        topic: "тема 1",
-                        date: Date.now(),
-                        actual_teacher: 1
-                    },
-                    {
-                        id: 2,
-                        subject: 2,
-                        number: 3,
-                        type: 4,
-                        teachers: [1],
-                        platoons: [1],
-                        room: 123,
-                        topic: "тема 2",
-                        date: Date.now(),
-                        actual_teacher: 1
-                    },
-                    {
-                        id: 3,
-                        subject: 2,
-                        number: 2,
-                        type: 4,
-                        teachers: [1],
-                        platoons: [2],
-                        room: 123,
-                        topic: "тема 3",
-                        date: Date.now(),
-                        actual_teacher: 1
-                    },
-                ]
-            },
-            {
-                date: 1469433907836,
-                lessons: [
-                    {
-                        id: 4,
-                        subject: 2,
-                        number: 1,
-                        type: 4,
-                        teachers: [1],
-                        platoons: [3],
-                        room: 123,
-                        topic: "тема 4",
-                        date: 1469433907836,
-                        actual_teacher: 1
-                    },
-                    {
-                        id: 5,
-                        subject: 2,
-                        number: 3,
-                        type: 4,
-                        teachers: [1],
-                        platoons: [1],
-                        room: 123,
-                        topic: "тема 2",
-                        date: 1469433907836,
-                        actual_teacher: 1
-                    },
-                    {
-                        id: 6,
-                        subject: 2,
-                        number: 2,
-                        type: 4,
-                        teachers: [1],
-                        platoons: [2],
-                        room: 123,
-                        topic: "тема 3",
-                        date: 1469433907836,
-                        actual_teacher: 1
-                    },
-                ]
-            },
-        ]
+        teachers: [],
+        subjects: [],
+        platoons: [],
+        lesson_types: [],
+        lessons: [],
+        days: [],
     };
 
     let events = document.createElement('div'),
@@ -197,12 +72,13 @@ export default ['$http', function ($http) {
         let lessons = day.lessons;
         let tempLessons = lessons.map(lesson => lesson.id);
         console.log(JSON.stringify(tempLessons));
-        $.ajax(`${baseUrl}/lessons/prediction`, {
-            type: 'POST',
+        $http({
+            url: `${baseUrl}/lessons/prediction`,
+            method: 'POST',
             data: JSON.stringify(tempLessons),
-            contentType: 'text/plain',
-        }).done(jsonData => {
-            day.lessons = jsonData.lessons;
+            headers: {'Content-Type': 'text/plain'}
+        }).then(jsonData => {
+            angular.copy(jsonData.data.lessons, day.lessons);
             events.dispatchEvent(onCollectionChanged);
         });
     }
@@ -211,20 +87,27 @@ export default ['$http', function ($http) {
         let lessons = getLessons(date);
         lessons.push(lesson);
         let tempLesson = angular.copy(lesson);
-        $.ajax(`${baseUrl}/lessons/add`, {
-            type: 'POST',
+        $http({
+            url: `${baseUrl}/lessons/add`,
+            method: 'POST',
             data: JSON.stringify(tempLesson),
-            contentType: 'text/plain',
-        }).done(jsonData => lesson.id = jsonData.id);
+            headers: {'Content-Type': 'text/plain'}
+        }).then(jsonData => lesson.id = jsonData.id);
     }
 
     function saveLesson(lesson) {
         let tempLesson = angular.copy(lesson);
-        console.log(JSON.stringify(tempLesson));
-        $.ajax(`${baseUrl}/lessons/save`, {
-            type: 'POST',
+        tempLesson.teachers.forEach(teacher => teacher.subjects = teacher.subjects.map(subject => {
+            return {id: subject.id}
+        }));
+        if (tempLesson.actual_teacher) tempLesson.actual_teacher.subjects = tempLesson.actual_teacher.subjects.map(subject => {
+            return {id: subject.id}
+        });
+        $http({
+            url: `${baseUrl}/lessons/save`,
+            method: 'POST',
             data: JSON.stringify(tempLesson),
-            contentType: 'text/plain',
+            headers: {'Content-Type': 'text/plain'}
         });
     }
 

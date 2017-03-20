@@ -23,6 +23,7 @@ export default ['$http', 'dataFactory', function ($http, dataFactory) {
 
         scope.delLesson = function () {
             let tempLesson = {
+                id: scope.lesson.id,
                 number: scope.lesson.number,
                 date: scope.lesson.date,
                 teachers: [],

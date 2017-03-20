@@ -105,7 +105,7 @@ export default ['dataFactory', function (dataFactory) {
         }
 
         scope.$watch(scope.date, () => {
-            let newDate = new Date(scope.date);
+            let newDate = new Date(scope.date * 1000);
             scope.date_show = newDate.toLocaleDateString('ru');
             console.log(newDate.toLocaleDateString('ru'));
         });
