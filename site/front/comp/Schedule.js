@@ -32,9 +32,11 @@ export default ['dataFactory', function (dataFactory) {
         grid.forEach(row => {
             row.forEach(item => {
                 if (item.isSelected) {
-                    let number = item.lesson.number,
+                    let id = item.lesson.id,
+                        number = item.lesson.number,
                         platoons = item.lesson.platoons;
                     replaceObject(item.lesson, lesson);
+                    item.lesson.id = id;
                     item.lesson.number = number;
                     item.lesson.platoons = platoons;
                 }
@@ -55,7 +57,6 @@ export default ['dataFactory', function (dataFactory) {
     };
 
     let link = (scope, element, attributes) => {
-
         scope.lessons = dataFactory.getLessons(scope.date);
         scope.availablePlatoons = dataFactory.getPlatoons();
         scope.date_show = '';
@@ -77,6 +78,7 @@ export default ['dataFactory', function (dataFactory) {
         }
 
         function initGrid() {
+            scope.lessons = dataFactory.getLessons(scope.date);
             scope.pairs.sort((a, b) => a - b);
             scope.platoons.sort((a, b) => a.number - b.number);
 
@@ -85,7 +87,11 @@ export default ['dataFactory', function (dataFactory) {
             scope.pairs.forEach((pair, i) => {
                 scope.grid[i] = [];
                 scope.platoons.forEach((platoon, j) => {
-                    let lesson = scope.lessons.find(lesson => lesson.platoons.includes(platoon) && lesson.number == pair);
+                    let lesson = scope.lessons.find(lesson => {
+                        console.log('platoon', lesson.platoons.find(plat => plat.number == platoon.number));
+                        console.log('platoon', lesson.number == pair);
+                        return lesson.platoons.find(plat => plat.number == platoon.number) && lesson.number == pair
+                    });
                     if (!lesson) {
                         lesson = {
                             number: pair,
@@ -93,7 +99,10 @@ export default ['dataFactory', function (dataFactory) {
                             teachers: [],
                             platoons: [platoon],
                         };
-                        dataFactory.addLesson(scope.date, lesson);
+                        dataFactory.addLesson(scope.date, lesson).then(() => {
+                        }, () => {
+                            throw 'failed to add lesson';
+                        });
                     }
                     scope.grid[i][j] = {
                         lesson,
@@ -107,11 +116,10 @@ export default ['dataFactory', function (dataFactory) {
         scope.$watch(scope.date, () => {
             let newDate = new Date(scope.date * 1000);
             scope.date_show = newDate.toLocaleDateString('ru');
-            console.log(newDate.toLocaleDateString('ru'));
         });
 
         dataFactory.events.addEventListener('collectionChanged', () => {
-            console.log('collectionChanged');
+            console.log('initGrid on collectionChanged');
             initGrid();
         });
 
@@ -119,12 +127,12 @@ export default ['dataFactory', function (dataFactory) {
 
         document.addEventListener('keydown', function (e) {
             if (e.ctrlKey) {
-                switch (e.key) {
-                    case 'c':
+                switch (e.keyCode) {
+                    case 67:
                         let buffer = copySelectedLesson(scope.grid);
                         if (buffer) scope.buffer.lesson = buffer;
                         break;
-                    case 'v':
+                    case 86:
                         pasteIntoSelectedLesson(scope.grid, scope.buffer.lesson);
                         break;
                 }
@@ -167,7 +175,9 @@ export default ['dataFactory', function (dataFactory) {
         scope.delPlatoon = function (platoon) {
             scope.grid.forEach(row => {
                 row.forEach(item => {
-                    if (item.lesson.platoons.includes(platoon)) dataFactory.delLesson(item.lesson)
+                    if (item.lesson.platoons.find(plat => plat.number == platoon.number)) {
+                        dataFactory.delLesson(item.lesson)
+                    }
                 })
             });
             Helpers.remove(scope.platoons, platoon);
@@ -182,9 +192,14 @@ export default ['dataFactory', function (dataFactory) {
             // scope.btnSaveClick();
             dataFactory.sortLessons(scope.date)
         };
-
+    
         scope.btnSaveClick = function () {
-            getAllLessonsFromGrid(scope.grid).forEach(lesson => dataFactory.saveLesson(lesson))
+            element.children.querySelector('.loading-modal')[0].style.display = "none";
+            let promises = [];
+            getAllLessonsFromGrid(scope.grid).forEach(lesson => promises.push(dataFactory.saveLesson(lesson)))
+            Promise.all(promises).then(() => {
+
+            })
         };
     };
 

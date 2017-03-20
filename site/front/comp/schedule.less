@@ -3,10 +3,26 @@
 
 schedule {
   display: block;
-  background: @colGray;
+  position: relative;
   padding: 10px;
-  overflow: auto hidden;
+  overflow: hidden;
   min-height: 400px;
+
+  .loading-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    display: none;
+    padding-top: 50px;
+  }
+}
+
+.schedule-table-wrapper {
+  overflow: auto;
 }
 
 .schedule-nav {

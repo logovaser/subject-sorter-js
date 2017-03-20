@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body schedule-table-wrapper">
         <table class="schedule-table">
             <thead>
             <tr>
@@ -35,7 +35,8 @@
                 <th ng-repeat="item in grid[0]" class="pair text-center">
                     <b>{{ item.platoon.number }}</b>
                     <button type="button" class="btn btn-danger btn-sm pull-right btn-close"
-                            ng-click="delPlatoon(item.platoon)">x</button>
+                            ng-click="delPlatoon(item.platoon)">x
+                    </button>
                 </th>
             </tr>
             </thead>
@@ -43,7 +44,8 @@
             <tr ng-repeat="row in grid" class="tr">
                 <td class="pair-number text-center">
                     <button type="button" class="btn btn-danger btn-sm btn-close"
-                            ng-click="delPair(row[0].lesson.number)">x</button>
+                            ng-click="delPair(row[0].lesson.number)">x
+                    </button>
                     <br>
                     <b>{{ row[0].lesson.number }}</b>
                 </td>
@@ -55,5 +57,11 @@
             </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="loading-modal">
+    <div class="center">
+        <h2>Завантаження...</h2>
     </div>
 </div>

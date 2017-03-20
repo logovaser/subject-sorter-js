@@ -71,7 +71,6 @@ export default ['$http', function ($http) {
         let day = data.days.find(day => day.date == date);
         let lessons = day.lessons;
         let tempLessons = lessons.map(lesson => lesson.id);
-        console.log(JSON.stringify(tempLessons));
         $http({
             url: `${baseUrl}/lessons/prediction`,
             method: 'POST',
@@ -87,12 +86,14 @@ export default ['$http', function ($http) {
         let lessons = getLessons(date);
         lessons.push(lesson);
         let tempLesson = angular.copy(lesson);
-        $http({
+        return $http({
             url: `${baseUrl}/lessons/add`,
             method: 'POST',
             data: JSON.stringify(tempLesson),
             headers: {'Content-Type': 'text/plain'}
-        }).then(jsonData => lesson.id = jsonData.id);
+        }).then(jsonData => {
+            lesson.id = jsonData.data.id
+        });
     }
 
     function saveLesson(lesson) {
@@ -103,7 +104,7 @@ export default ['$http', function ($http) {
         if (tempLesson.actual_teacher) tempLesson.actual_teacher.subjects = tempLesson.actual_teacher.subjects.map(subject => {
             return {id: subject.id}
         });
-        $http({
+        return $http({
             url: `${baseUrl}/lessons/save`,
             method: 'POST',
             data: JSON.stringify(tempLesson),
@@ -141,7 +142,7 @@ export default ['$http', function ($http) {
     }
 
     events.addEventListener('collectionChanged', () => {
-        console.log('collectionChanged');
+        console.log('parseLessons on collectionChanged', data);
         parseLessons(data)
     });
 

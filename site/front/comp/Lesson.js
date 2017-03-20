@@ -27,7 +27,7 @@ export default ['$http', 'dataFactory', function ($http, dataFactory) {
                 number: scope.lesson.number,
                 date: scope.lesson.date,
                 teachers: [],
-                platoons: scope.lesson.platoons,
+                platoons: angular.copy(scope.lesson.platoons),
             };
             angular.copy(tempLesson, scope.lesson);
         }

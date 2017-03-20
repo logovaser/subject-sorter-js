@@ -32,8 +32,6 @@ subSortApp.controller('scheduleCtrl', ['$scope', '$http', 'dataFactory', functio
 
     $scope.loadSchedule = function (e) {
         e.preventDefault();
-        console.log('start:', $scope.tab.dt_start);
-        console.log('end:', $scope.tab.dt_end);
 
         dataFactory.fetchDays(+$scope.tab.dt_start / 1000, +$scope.tab.dt_end / 1000);
     };
