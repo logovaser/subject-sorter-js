@@ -192,9 +192,9 @@ export default ['dataFactory', function (dataFactory) {
             // scope.btnSaveClick();
             dataFactory.sortLessons(scope.date)
         };
-    
+
         scope.btnSaveClick = function () {
-            element.children.querySelector('.loading-modal')[0].style.display = "none";
+            // element.children.querySelector('.loading-modal')[0].style.display = "none";
             let promises = [];
             getAllLessonsFromGrid(scope.grid).forEach(lesson => promises.push(dataFactory.saveLesson(lesson)))
             Promise.all(promises).then(() => {
