@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Налаштування</title>
+</head>
+<body class="container">
+<div class="row">
+    <div ng-app="subSortApp" ng-controller="settingsCtrl" class="col-md-offset-3 col-md-6">
+
+        <form ng-submit="addNewTeacher()">
+            <h1>Додати нового вчителя</h1>
+            <div class="form-group">
+                <label for="surname">Прізвище</label>
+                <input id="surname" class="form-control" ng-model="teacher.surname">
+            </div>
+            <div class="form-group">
+                <label for="first_name">Ім'я</label>
+                <input id="first_name" class="form-control" ng-model="teacher.first_name">
+            </div>
+            <div class="form-group">
+                <label for="middle_name">По-батькові</label>
+                <input id="middle_name" class="form-control" ng-model="teacher.middle_name">
+            </div>
+            <div class="form-group">
+                <label for="methodical_day">Методичний день</label>
+                <select id="methodical_day" class="form-control" ng-model="teacher.methodical_day">
+                    <option ng-repeat="day in weeekdays" ng-bind="day.name"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="subjects">Предмети</label>
+                <select id="subjects" class="form-control" multiple ng-model="teacher.subjects">
+                    <option ng-repeat="subject in subjects" ng-bind="subject.name"></option>
+                </select>
+            </div>
+            <button class="btn btn-success">Додати</button>
+        </form>
+        <br>
+
+        <form ng-submit="addNewSubject()">
+            <h1>Додати новий предмет</h1>
+            <div class="form-group">
+                <label for="subject_name">Назва</label>
+                <input id="subject_name" name="name" class="form-control" ng-model="subject.name">
+            </div>
+            <button class="btn btn-success">Додати</button>
+        </form>
+        <br>
+
+        <form ng-submit="addNewSubjectType()">
+            <h1>Додати новий тип предмета</h1>
+            <div class="form-group">
+                <label for="subjectType_name">Назва</label>
+                <input id="subjectType_name" name="name" class="form-control" ng-model="subjectType.name">
+            </div>
+            <button class="btn btn-success">Додати</button>
+        </form>
+        <br>
+
+        <form ng-submit="addNewPlatoon()">
+            <h1>Додати новий взвод</h1>
+            <div class="form-group">
+                <label for="platoon_number">Номер</label>
+                <input id="platoon_number" name="number" class="form-control" ng-model="platoon.number">
+            </div>
+            <button class="btn btn-success">Додати</button>
+        </form>
+    </div>
+</div>
+</body>
+<script src="/static/settings.js"></script>
+</html>

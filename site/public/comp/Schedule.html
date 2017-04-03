@@ -32,7 +32,7 @@
             <thead>
             <tr>
                 <th></th>
-                <th ng-repeat="item in grid[0]" class="pair text-center">
+                <th ng-repeat="item in grid[0].lessons" class="pair text-center">
                     <b>{{ item.platoon.number }}</b>
                     <button type="button" class="btn btn-danger btn-sm pull-right btn-close"
                             ng-click="delPlatoon(item.platoon)">x
@@ -44,12 +44,12 @@
             <tr ng-repeat="row in grid" class="tr">
                 <td class="pair-number text-center">
                     <button type="button" class="btn btn-danger btn-sm btn-close"
-                            ng-click="delPair(row[0].lesson.number)">x
+                            ng-click="delPair(row.number)">x
                     </button>
                     <br>
-                    <b>{{ row[0].lesson.number }}</b>
+                    <b>{{ row.number }}</b>
                 </td>
-                <td ng-repeat="item in row" class="pair">
+                <td ng-repeat="item in row.lessons" class="pair">
                     <lesson lesson="item.lesson"
                             ng-click="lessonClick(item)"
                             ng-class="item.isSelected ? 'selected' : ''"></lesson>

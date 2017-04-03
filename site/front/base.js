@@ -6,6 +6,7 @@ import angular from 'angular'
 import 'bootstrap/dist/css/bootstrap.css'
 import './fonts/Roboto-Regular.less'
 import './base.less'
+import './home.less'
 import dataFactory from './dataFactory'
 import Schedule from './comp/Schedule'
 import Lesson from './comp/Lesson'
@@ -30,6 +31,12 @@ subSortApp.controller('scheduleCtrl', ['$scope', '$http', 'dataFactory', functio
         $scope.days = dataFactory.getDays();
     });
 
+    function addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + parseInt(days));
+        return new Date(result);
+    }
+
     $scope.loadSchedule = function (e) {
         e.preventDefault();
 
@@ -38,6 +45,8 @@ subSortApp.controller('scheduleCtrl', ['$scope', '$http', 'dataFactory', functio
 
     $scope.addSchedule = function (e) {
         e.preventDefault();
+        let selectedDate = new Date(+$scope.tab.dt_new_sch);
+        let endDate = addDays(selectedDate, 7);
         dataFactory.addDay(+$scope.tab.dt_new_sch / 1000);
     };
 

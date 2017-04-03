@@ -6,7 +6,7 @@ import Helpers from './helpers'
 
 export default ['$http', function ($http) {
 
-    let baseUrl = 'http://fbc37584.ngrok.io/app.php';
+    let baseUrl = 'http://192.168.1.111:8088';
 
     let data = {
         teachers: [],
@@ -15,14 +15,15 @@ export default ['$http', function ($http) {
         lesson_types: [],
         lessons: [],
         days: [],
+        buffer: {},
     };
 
     let events = document.createElement('div'),
         onCollectionChanged = new CustomEvent('collectionChanged');
 
     function getList(listName) {
-        return $http.get(`${baseUrl}/${listName}/list`).then(jsonData => {
-            angular.copy(jsonData.data[listName], data[listName]);
+        return $http.get(`${baseUrl}/${listName}/list`).then(res => {
+            angular.copy(res.data[listName], data[listName]);
             events.dispatchEvent(onCollectionChanged);
         })
     }
@@ -32,8 +33,8 @@ export default ['$http', function ($http) {
     }
 
     function fetchLessonTypes() {
-        return $http.get(`${baseUrl}/lessons/types/list`).then(jsonData => {
-            angular.copy(jsonData.data.types, data.lesson_types);
+        return $http.get(`${baseUrl}/lessons/types/list`).then(res => {
+            angular.copy(res.data.types, data.lesson_types);
             events.dispatchEvent(onCollectionChanged);
         })
     }
@@ -170,6 +171,9 @@ export default ['$http', function ($http) {
 
         delLesson,
         delDay,
+
+        getBuffer: () => data.buffer,
+        setBuffer: buffer => data.buffer = buffer,
 
         events
     }

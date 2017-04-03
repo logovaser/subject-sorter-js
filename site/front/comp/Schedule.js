@@ -66,7 +66,7 @@ export default ['dataFactory', function (dataFactory) {
         scope.pairToAdd = 1;
         scope.platoonToAdd = false;
 
-        scope.pairs = [];
+        scope.pairs = [1,2,3,4];
         scope.platoons = [];
 
         for (let lesson of scope.lessons) {
@@ -85,11 +85,12 @@ export default ['dataFactory', function (dataFactory) {
             scope.grid = [];
 
             scope.pairs.forEach((pair, i) => {
-                scope.grid[i] = [];
+                scope.grid[i] = {
+                    number: pair,
+                    lessons: []
+                };
                 scope.platoons.forEach((platoon, j) => {
                     let lesson = scope.lessons.find(lesson => {
-                        console.log('platoon', lesson.platoons.find(plat => plat.number == platoon.number));
-                        console.log('platoon', lesson.number == pair);
                         return lesson.platoons.find(plat => plat.number == platoon.number) && lesson.number == pair
                     });
                     if (!lesson) {
@@ -104,7 +105,7 @@ export default ['dataFactory', function (dataFactory) {
                             throw 'failed to add lesson';
                         });
                     }
-                    scope.grid[i][j] = {
+                    scope.grid[i].lessons[j] = {
                         lesson,
                         platoon,
                         isSelected: false
@@ -130,10 +131,10 @@ export default ['dataFactory', function (dataFactory) {
                 switch (e.keyCode) {
                     case 67:
                         let buffer = copySelectedLesson(scope.grid);
-                        if (buffer) scope.buffer.lesson = buffer;
+                        if (buffer) dataFactory.setBuffer(buffer);
                         break;
                     case 86:
-                        pasteIntoSelectedLesson(scope.grid, scope.buffer.lesson);
+                        pasteIntoSelectedLesson(scope.grid, dataFactory.getBuffer());
                         break;
                 }
             }

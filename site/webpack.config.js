@@ -8,6 +8,7 @@ const webpack = require('webpack'),
 module.exports = {
     entry: {
         index: './front/base',
+        settings: './front/pages/settings',
     },
     output: {
         path: path.join(__dirname, 'public/static'),
