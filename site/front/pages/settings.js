@@ -14,16 +14,29 @@ subSortApp.controller('settingsCtrl', ['$scope', '$http', function ($scope, $htt
     let baseUrl = 'http://192.168.1.111:8088';
 
     $scope.subjects = [];
+    $scope.weekdays = [
+        {id: 1, alias: 'monday', name: 'Понеділок'},
+        {id: 1, alias: 'tuesday', name: 'Вівторок'},
+        {id: 1, alias: 'wednesday', name: 'Середа'},
+        {id: 1, alias: 'thursday', name: 'Четвер'},
+        {id: 1, alias: 'friday', name: "П'ятниця"},
+        {id: 1, alias: 'saturday', name: 'Субота'},
+        {id: 1, alias: 'sunday', name: 'Неділя'},
+    ];
 
     $scope.teacher = {};
     $scope.subject = {};
     $scope.subjectType = {};
     $scope.platoon = {};
 
-    $http.get('/subjects/list').then(res => $scope.subjects = res.data.subjects);
+    $http.get(`${baseUrl}/subjects/list`).then(res => $scope.subjects = res.data.subjects);
 
     $scope.addNewTeacher = function () {
-        console.log($scope.teacher);
+        let data = angular.copy($scope.teacher);
+        data.methodical_day = {day: data.methodical_day};
+        data.subjects = data.subjects.map(subject => ({id: subject.id}));
+
+        console.log(data);
 
         // $http.post($scope.teacher).then(res => {
         //
