@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body ng-app="subSortApp" ng-controller="statsCtrl">
+<table class="table table-bordered table-stats">
+    <thead>
+    <tr>
+        <th>Викладач</th>
+        <th width="80">Л</th>
+        <th width="80">ПЗ 1/2</th>
+        <th width="80">ПЗ</th>
+        <th width="80">ГВ 1/2</th>
+        <th width="80">ГВ</th>
+        <th width="80">НРПКВ</th>
+        <th width="80">ГЗ</th>
+        <th width="140"><b>Всього</b></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in list">
+        <td>{{item.teacher}}</td>
+        <td>{{item.lections}}</td>
+        <td>{{item.practise_one_half}}</td>
+        <td>{{item.practises}}</td>
+        <td>{{item.group_exercises_one_half}}</td>
+        <td>{{item.group_exercises}}</td>
+        <td>{{item.independent_work_under_the_guidance_of_teacher}}</td>
+        <td>{{item.group_lesson}}</td>
+        <td>{{item.summary}}</td>
+    </tr>
+    </tbody>
+</table>
+
+<script src="/static/stats.js"></script>
+</body>
+</html>

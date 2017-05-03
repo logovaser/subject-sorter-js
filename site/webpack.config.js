@@ -8,7 +8,8 @@ const webpack = require('webpack'),
 module.exports = {
     entry: {
         index: './front/base',
-        settings: './front/pages/settings',
+        settings: './front/pages/settings/base',
+        stats: './front/pages/stats/base',
     },
     output: {
         path: path.join(__dirname, 'public/static'),
@@ -22,11 +23,11 @@ module.exports = {
         //     output: {comments: false},
         //     sourceMap: true
         // }),
-        // new webpack.ProvidePlugin({
-        //     $: "jquery",
-        //     jQuery: "jquery",
-        //     "window.jQuery": "jquery"
-        // })
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            "window.jQuery": "jquery"
+        })
     ],
     module: {
         rules: [

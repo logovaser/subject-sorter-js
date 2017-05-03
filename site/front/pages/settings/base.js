@@ -4,14 +4,15 @@
 
 import angular from 'angular'
 import 'bootstrap/dist/css/bootstrap.css'
-import '../fonts/Roboto-Regular.less'
-import '../base.less'
+import '../../fonts/Roboto-Regular.less'
+import '../../base.less'
 
 let subSortApp = angular.module('subSortApp', []);
 
 subSortApp.controller('settingsCtrl', ['$scope', '$http', function ($scope, $http) {
 
-    let baseUrl = 'http://192.168.1.111:8088';
+    // let baseUrl = 'http://192.168.1.111:8088';
+    let baseUrl = 'http://ce13c1f9.ngrok.io/app.php';
 
     $scope.subjects = [];
     $scope.weekdays = [
@@ -38,21 +39,21 @@ subSortApp.controller('settingsCtrl', ['$scope', '$http', function ($scope, $htt
 
         console.log(data);
 
-        // $http.post($scope.teacher).then(res => {
-        //
-        // })
+        $http.post(`${baseUrl}/teachers/add`, data).then(res => {
+            if (res.status === 201) alert('Зміни збережені')
+        })
     };
 
-    $scope.addNewSubject = function () {
-
+    $scope.addNewLessonType = function () {
+        $http.post(`${baseUrl}/lessons/types/add`, $scope.subjectType).then(res => {
+            if (res.status === 201) alert('Зміни збережені')
+        })
     };
 
-    $scope.addNewSubjectType = function () {
-
+    $scope.addNew = function (type) {
+        $http.post(`${baseUrl}/${type}s/add`, $scope[type]).then(res => {
+            if (res.status === 201) alert('Зміни збережені')
+        })
     };
-
-    $scope.addNewPlatoon = function () {
-
-    }
 
 }]);

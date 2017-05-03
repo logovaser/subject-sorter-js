@@ -4,9 +4,10 @@
 
 import Helpers from './helpers'
 
-export default ['$http', function ($http) {
+export default ['$http', '$uibModal', function ($http, $uibModal) {
 
-    let baseUrl = 'http://192.168.1.111:8088';
+    // let baseUrl = 'http://192.168.1.111:8088';
+    let baseUrl = 'http://308761a0.ngrok.io/app_dev.php';
 
     let data = {
         teachers: [],
@@ -19,6 +20,7 @@ export default ['$http', function ($http) {
     };
 
     let events = document.createElement('div'),
+        onSelectionChanged = new CustomEvent('selectionChanged'),
         onCollectionChanged = new CustomEvent('collectionChanged');
 
     function getList(listName) {
@@ -52,6 +54,22 @@ export default ['$http', function ($http) {
         });
     }
 
+    function checkIfHasLessons(startDate, endDate) {
+        let url = '';
+        if (arguments.length == 1) url = `${baseUrl}/lessons?on_date=${startDate}`;
+        else if (arguments.length == 2) url = `${baseUrl}/lessons?from_date=${startDate}&to_date=${endDate}`;
+        else return;
+
+        return new Promise((resolve, reject) => {
+            $http.get(url).then(jsonData => {
+                jsonData.data.forEach(day => {
+                    if (day['lessons'] || [].length > 0) reject()
+                });
+                resolve();
+            });
+        });
+    }
+
     function addDay(date) {
         data.days.push({
             date: date,
@@ -60,10 +78,20 @@ export default ['$http', function ($http) {
     }
 
     function initLists() {
-        getList('subjects');
-        getList('platoons');
-        getList('teachers');
-        fetchLessonTypes();
+        let loadingModal = $uibModal.open({
+            templateUrl: 'comp/loadingModal.html',
+            backdrop: 'static',
+            keyboard: false
+        });
+
+        let promises = [
+            getList('subjects'),
+            getList('platoons'),
+            getList('teachers'),
+            fetchLessonTypes()
+        ];
+
+        Promise.all(promises).then(() => loadingModal.close());
     }
 
     initLists();
@@ -72,13 +100,21 @@ export default ['$http', function ($http) {
         let day = data.days.find(day => day.date == date);
         let lessons = day.lessons;
         let tempLessons = lessons.map(lesson => lesson.id);
-        $http({
+
+        return $http({
             url: `${baseUrl}/lessons/prediction`,
             method: 'POST',
             data: JSON.stringify(tempLessons),
             headers: {'Content-Type': 'text/plain'}
         }).then(jsonData => {
-            angular.copy(jsonData.data.lessons, day.lessons);
+            // angular.extend(day.lessons, jsonData.data.lessons);
+            jsonData.data.lessons.forEach(lesson => {
+                day.lessons.forEach(lesson2 => {
+                    if (lesson2.id == lesson.id) {
+                        angular.copy(lesson, lesson2)
+                    }
+                })
+            });
             events.dispatchEvent(onCollectionChanged);
         });
     }
@@ -119,6 +155,11 @@ export default ['$http', function ($http) {
 
     function delDay(date) {
         Helpers.remove(data.days, data.days.find(day => day.date == date));
+    }
+
+    function delAllDays() {
+        data.days = [];
+        events.dispatchEvent(onCollectionChanged);
     }
 
     function parseLessons(d) {
@@ -163,6 +204,8 @@ export default ['$http', function ($http) {
         fetchLessonTypes,
         fetchDays,
 
+        checkIfHasLessons,
+
         sortLessons,
         saveLesson,
 
@@ -171,10 +214,12 @@ export default ['$http', function ($http) {
 
         delLesson,
         delDay,
+        delAllDays,
 
         getBuffer: () => data.buffer,
         setBuffer: buffer => data.buffer = buffer,
 
-        events
+        events,
+        clearSelection: () => events.dispatchEvent(onSelectionChanged)
     }
 }]

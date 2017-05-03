@@ -14,4 +14,8 @@ router.get('/settings', function (req, res) {
     res.sendFile(path.join(__dirname + '/site/public/pages/Settings.html'))
 });
 
+router.get('/stats', function (req, res) {
+    res.sendFile(path.join(__dirname + '/site/public/pages/Stats.html'))
+});
+
 module.exports = router;

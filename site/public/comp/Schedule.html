@@ -51,8 +51,9 @@
                 </td>
                 <td ng-repeat="item in row.lessons" class="pair">
                     <lesson lesson="item.lesson"
-                            ng-click="lessonClick(item)"
-                            ng-class="item.isSelected ? 'selected' : ''"></lesson>
+                            ng-mousedown="lessonClick(item)"
+                            ng-class="item.isSelected ? 'selected' : ''"
+                            context-menu="menuOptions"></lesson>
                 </td>
             </tr>
             </tbody>

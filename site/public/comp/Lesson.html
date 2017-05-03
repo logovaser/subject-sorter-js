@@ -1,51 +1,10 @@
-<button type="button" class="btn btn-danger btn-sm pull-right btn-close" ng-click="delLesson()">x</button>
-<table class="lesson-content" ng-dblclick="toggleEditMode()">
-    <tr>
-        <td>Предмет:</td>
-        <td ng-show="state.editMode">
-            <select ng-model="lesson.subject">
-                <option ng-repeat="subject in avaliableSubjects" ng-value="subject">{{subject.name}}</option>
-            </select>
-        </td>
-        <td ng-hide="state.editMode">{{lesson.subject.name}}</td>
-    </tr>
-    <tr>
-        <td>Тема:</td>
-        <td ng-show="state.editMode"><input ng-model="lesson.topic"></td>
-        <td ng-hide="state.editMode">{{lesson.topic}}</td>
-    </tr>
-    <tr>
-        <td>Тип:</td>
-        <td ng-show="state.editMode">
-            <select ng-model="lesson.type">
-                <option ng-repeat="type in availableLessonTypes" ng-value="type">{{type.name}}</option>
-            </select>
-        </td>
-        <td ng-hide="state.editMode">{{lesson.type.name}}</td>
-    </tr>
-    <tr>
-        <td>Викл.:</td>
-        <td ng-show="state.editMode">
-            <select multiple ng-model="lesson.teachers">
-                <option ng-repeat="teacher in avaliableTeachers" ng-value="teacher">{{teacher.surname}}</option>
-            </select>
-        </td>
-        <td ng-hide="state.editMode">
-            <span ng-repeat="teacher in lesson.teachers">{{ teacher.surname }}, </span>
-        </td>
-    </tr>
-    <tr>
-        <td>Проводить:</td>
-        <td ng-show="state.editMode">
-            <select ng-model="lesson.actual_teacher">
-                <option ng-repeat="teacher in avaliableTeachers" ng-value="teacher">{{teacher.surname}}</option>
-            </select>
-        </td>
-        <td ng-hide="state.editMode">{{lesson.actual_teacher.surname}}</td>
-    </tr>
-    <tr>
-        <td>Ауд.:</td>
-        <td ng-show="state.editMode"><input ng-model="lesson.room"></td>
-        <td ng-hide="state.editMode">{{lesson.room}}</td>
-    </tr>
-</table>
+<div class="lesson-content">
+    <div ng-bind="lesson.subject.name"></div>
+    <div ng-bind="lesson.topic"></div>
+    <div ng-bind="lesson.type.name"></div>
+    <div><span ng-repeat="teacher in lesson.teachers">
+        <span ng-show="lesson.actual_teacher.surname != teacher.surname">{{ teacher.surname }}</span>
+        <b ng-show="lesson.actual_teacher.surname === teacher.surname"></b>
+    </span></div>
+    <div ng-bind="lesson.room"></div>
+</div>

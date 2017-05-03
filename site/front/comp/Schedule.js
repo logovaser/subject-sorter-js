@@ -6,7 +6,7 @@ import './schedule.less'
 import './schedule-table.less'
 import Helpers from '../helpers'
 
-export default ['dataFactory', function (dataFactory) {
+export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
 
     function replaceObject(obj, replaceWith) {
         for (let key in obj) {
@@ -20,7 +20,7 @@ export default ['dataFactory', function (dataFactory) {
     let copySelectedLesson = grid => {
         let selectedLesson = false;
         grid.forEach(row => {
-            row.forEach(item => {
+            row.lessons.forEach(item => {
                 if (item.isSelected) selectedLesson = item.lesson;
             })
         });
@@ -30,7 +30,7 @@ export default ['dataFactory', function (dataFactory) {
     let pasteIntoSelectedLesson = (grid, lesson) => {
         if (!lesson) return;
         grid.forEach(row => {
-            row.forEach(item => {
+            row.lessons.forEach(item => {
                 if (item.isSelected) {
                     let id = item.lesson.id,
                         number = item.lesson.number,
@@ -45,13 +45,13 @@ export default ['dataFactory', function (dataFactory) {
     };
 
     let clearSelection = grid => {
-        grid.forEach(row => row.forEach(item => item.isSelected = false))
+        grid.forEach(row => row.lessons.forEach(item => item.isSelected = false))
     };
 
     let getAllLessonsFromGrid = grid => {
         let lessons = [];
         grid.forEach(row => {
-            row.forEach(item => lessons.push(item.lesson))
+            row.lessons.forEach(item => lessons.push(item.lesson))
         });
         return lessons;
     };
@@ -66,8 +66,42 @@ export default ['dataFactory', function (dataFactory) {
         scope.pairToAdd = 1;
         scope.platoonToAdd = false;
 
-        scope.pairs = [1,2,3,4];
+        scope.pairs = [1, 2, 3, 4];
         scope.platoons = [];
+
+        let lessonModal;
+
+        scope.menuOptions = [
+            ['Редагувати', function ($itemScope, $event, modelValue, text, $li) {
+                lessonModal = $uibModal.open({
+                    templateUrl: 'comp/LessonPopup.html',
+                    controller: 'lessonPopupCtrl',
+                    resolve: {lesson: () => $itemScope.item.lesson}
+                });
+            }],
+            ['Копіювати', function ($itemScope, $event, modelValue, text, $li) {
+                let buffer = copySelectedLesson(scope.grid);
+                if (buffer) dataFactory.setBuffer(buffer);
+            }],
+            ['Вставити', function ($itemScope, $event, modelValue, text, $li) {
+                pasteIntoSelectedLesson(scope.grid, dataFactory.getBuffer())
+            }],
+            ['Видалити', function ($itemScope, $event, modelValue, text, $li) {
+                if (confirm('Ви впевнені?')) {
+                    scope.delLesson($itemScope.item.lesson)
+                }
+            }],
+        ];
+
+        function initPlatoons() {
+            let days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            let weekday = days[new Date(scope.date * 1000).getDay()];
+            dataFactory.getPlatoons().forEach(platoon => {
+                if (weekday === platoon.study_day) scope.platoons.push(platoon)
+            })
+        }
+
+        initPlatoons();
 
         for (let lesson of scope.lessons) {
             if (!scope.pairs.includes(lesson.number)) scope.pairs.push(lesson.number);
@@ -91,7 +125,7 @@ export default ['dataFactory', function (dataFactory) {
                 };
                 scope.platoons.forEach((platoon, j) => {
                     let lesson = scope.lessons.find(lesson => {
-                        return lesson.platoons.find(plat => plat.number == platoon.number) && lesson.number == pair
+                        return lesson.platoons.find(plat => plat.number == platoon.number && lesson.number == pair)
                     });
                     if (!lesson) {
                         lesson = {
@@ -124,6 +158,10 @@ export default ['dataFactory', function (dataFactory) {
             initGrid();
         });
 
+        dataFactory.events.addEventListener('selectionChanged', () => {
+            clearSelection(scope.grid);
+        });
+
         initGrid();
 
         document.addEventListener('keydown', function (e) {
@@ -142,9 +180,8 @@ export default ['dataFactory', function (dataFactory) {
         });
 
         scope.lessonClick = function (item) {
-            let isSelected = item.isSelected;
-            clearSelection(scope.grid);
-            item.isSelected = !isSelected;
+            dataFactory.clearSelection();
+            item.isSelected = true;
         };
 
         scope.addPair = function () {
@@ -165,7 +202,7 @@ export default ['dataFactory', function (dataFactory) {
 
         scope.delPair = function (pair) {
             scope.grid.forEach(row => {
-                row.forEach(item => {
+                row.lessons.forEach(item => {
                     if (item.lesson.number == pair) dataFactory.delLesson(item.lesson)
                 })
             });
@@ -175,7 +212,7 @@ export default ['dataFactory', function (dataFactory) {
 
         scope.delPlatoon = function (platoon) {
             scope.grid.forEach(row => {
-                row.forEach(item => {
+                row.lessons.forEach(item => {
                     if (item.lesson.platoons.find(plat => plat.number == platoon.number)) {
                         dataFactory.delLesson(item.lesson)
                     }
@@ -189,18 +226,44 @@ export default ['dataFactory', function (dataFactory) {
             dataFactory.delDay(scope.date)
         };
 
+        scope.delLesson = function (lesson) {
+            let tempLesson = {
+                id: lesson.id,
+                number: lesson.number,
+                date: lesson.date,
+                teachers: [],
+                platoons: angular.copy(lesson.platoons),
+            };
+            angular.copy(tempLesson, lesson);
+        };
+
         scope.btnSortClick = function () {
-            // scope.btnSaveClick();
-            dataFactory.sortLessons(scope.date)
+            scope.btnSaveClick().then(() => {
+                let loadingModal = $uibModal.open({
+                    templateUrl: 'comp/loadingModal.html',
+                    backdrop: 'static',
+                    keyboard: false
+                });
+
+                dataFactory.sortLessons(scope.date).then(() => loadingModal.close())
+            })
         };
 
         scope.btnSaveClick = function () {
-            // element.children.querySelector('.loading-modal')[0].style.display = "none";
-            let promises = [];
-            getAllLessonsFromGrid(scope.grid).forEach(lesson => promises.push(dataFactory.saveLesson(lesson)))
-            Promise.all(promises).then(() => {
 
-            })
+            let loadingModal = $uibModal.open({
+                templateUrl: 'comp/loadingModal.html',
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            let promises = [];
+            getAllLessonsFromGrid(scope.grid).forEach(lesson => promises.push(dataFactory.saveLesson(lesson)));
+
+            return new Promise(resolve => Promise.all(promises).then(() => {
+                loadingModal.close();
+                resolve();
+            }))
         };
     };
 

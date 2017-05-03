@@ -4,33 +4,10 @@
 
 import './lesson.less'
 
-export default ['$http', 'dataFactory', function ($http, dataFactory) {
+export default [function () {
 
     let link = (scope, element, attributes) => {
 
-        // scope.lesson   --- we've got this thing
-        scope.state = {
-            editMode: false
-        };
-
-        scope.toggleEditMode = function () {
-            scope.state.editMode = !scope.state.editMode;
-        };
-
-        scope.avaliableSubjects = dataFactory.getSubjects();
-        scope.availableLessonTypes = dataFactory.getLessonTypes();
-        scope.avaliableTeachers = dataFactory.getTeachers();
-
-        scope.delLesson = function () {
-            let tempLesson = {
-                id: scope.lesson.id,
-                number: scope.lesson.number,
-                date: scope.lesson.date,
-                teachers: [],
-                platoons: angular.copy(scope.lesson.platoons),
-            };
-            angular.copy(tempLesson, scope.lesson);
-        }
     };
 
     return {
