@@ -28,15 +28,19 @@
         <tr>
             <td>Викл.:</td>
             <td>
-                <select class="form-control" multiple ng-model="lesson.teachers">
-                    <option ng-repeat="teacher in avaliableTeachers" ng-value="teacher">{{teacher.surname}}</option>
-                </select>
+                <ui-select multiple ng-model="lesson.teachers" theme="bootstrap">
+                    <ui-select-match placeholder="Виберіть вчителів...">{{$item.surname}}</ui-select-match>
+                    <ui-select-choices repeat="teacher in avaliableTeachers | filter:$select.search"
+                                       ng-value="teacher">{{teacher.surname}}
+                    </ui-select-choices>
+                </ui-select>
             </td>
         </tr>
         <tr>
             <td>Проводить:</td>
             <td>
                 <select class="form-control" ng-model="lesson.actual_teacher">
+                    <option ng-value="undefined"></option>
                     <option ng-repeat="teacher in avaliableTeachers" ng-value="teacher">{{teacher.surname}}</option>
                 </select>
             </td>

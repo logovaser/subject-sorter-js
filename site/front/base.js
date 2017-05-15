@@ -2,21 +2,25 @@
  * Created by logov on 20-Oct-16.
  */
 
-import angular from 'angular'
-import 'angular-bootstrap-contextmenu/contextMenu'
-import modal from 'angular-ui-bootstrap'
-import 'jquery'
-import 'bootstrap/dist/js/bootstrap'
 import 'bootstrap/dist/css/bootstrap.css'
+import 'ui-select/dist/select.css'
 import './fonts/Roboto-Regular.less'
 import './base.less'
 import './home.less'
+
+import 'jquery'
+import 'bootstrap/dist/js/bootstrap'
+import angular from 'angular'
+import 'angular-bootstrap-contextmenu/contextMenu'
+import modal from 'angular-ui-bootstrap'
+import uiSelect from 'ui-select'
+
 import dataFactory from './dataFactory'
 import Schedule from './comp/Schedule'
 import Lesson from './comp/Lesson'
 import LessonPopup from './comp/LessonPopup'
 
-let subSortApp = angular.module('subSortApp', ['ui.bootstrap.contextMenu', modal]);
+let subSortApp = angular.module('subSortApp', ['ui.bootstrap.contextMenu', modal, uiSelect]);
 
 subSortApp.factory('dataFactory', dataFactory);
 
@@ -66,7 +70,12 @@ subSortApp.controller('scheduleCtrl', ['$scope', '$http', 'dataFactory', '$uibMo
             keyboard: false
         });
 
-        dataFactory.fetchDays(+$scope.tab.dt_start / 1000, +$scope.tab.dt_end / 1000).then(() => loadingModal.close());
+        dataFactory.fetchDays(+$scope.tab.dt_start / 1000, +$scope.tab.dt_end / 1000)
+            .then(() => loadingModal.close())
+            .catch(() => {
+                loadingModal.close();
+                $uibModal.open({templateUrl: 'comp/errorModal.html'});
+            });
     };
 
     $scope.addSchedule = function () {
@@ -84,6 +93,10 @@ subSortApp.controller('scheduleCtrl', ['$scope', '$http', 'dataFactory', '$uibMo
                 $scope.$apply()
             }, () => {
                 alert('На ці дати вже було створено уроки. Скористайтесь пошуком.')
+            })
+            .catch(() => {
+                loadingModal.close();
+                $uibModal.open({templateUrl: 'comp/errorModal.html'});
             });
 
     };

@@ -7,7 +7,7 @@ import Helpers from './helpers'
 export default ['$http', '$uibModal', function ($http, $uibModal) {
 
     // let baseUrl = 'http://192.168.1.111:8088';
-    let baseUrl = 'http://308761a0.ngrok.io/app_dev.php';
+    let baseUrl = 'http://8c0bf3d5.ngrok.io/app.php';
 
     let data = {
         teachers: [],

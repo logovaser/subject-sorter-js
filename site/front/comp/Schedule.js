@@ -44,6 +44,26 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
         });
     };
 
+    let moveSelection = (grid, dir) => {
+        for (let i = 0; i < grid.length; i++) {
+            for (let j = 0; j < grid[i].lessons.length; j++) {
+                if (grid[i].lessons[j].isSelected) {
+                    let target;
+                    if (dir === 'r') target = grid[i].lessons[j - 1];
+                    else if (dir === 'u') target = grid[i - 1].lessons[j];
+                    else if (dir === 'l') target = grid[i].lessons[j + 1];
+                    else if (dir === 'd') target = grid[i + 1].lessons[j];
+
+                    if (target) {
+                        grid[i].lessons[j].isSelected = false;
+                        target.isSelected = true;
+                    }
+                    return;
+                }
+            }
+        }
+    };
+
     let clearSelection = grid => {
         grid.forEach(row => row.lessons.forEach(item => item.isSelected = false))
     };
@@ -176,6 +196,22 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
                         break;
                 }
             }
+            else {
+                switch (e.keyCode) {
+                    case 37:
+                        moveSelection(scope.grid, 'r');
+                        break;
+                    case 38:
+                        moveSelection(scope.grid, 'u');
+                        break;
+                    case 39:
+                        moveSelection(scope.grid, 'l');
+                        break;
+                    case 40:
+                        moveSelection(scope.grid, 'd');
+                        break;
+                }
+            }
             scope.$apply();
         });
 
@@ -245,7 +281,12 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
                     keyboard: false
                 });
 
-                dataFactory.sortLessons(scope.date).then(() => loadingModal.close())
+                dataFactory.sortLessons(scope.date).then(() => {
+                    loadingModal.close();
+                    loadingModal.close();
+                }).catch(() => {
+                    $uibModal.open({templateUrl: 'comp/errorModal.html'});
+                })
             })
         };
 
@@ -263,7 +304,10 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
             return new Promise(resolve => Promise.all(promises).then(() => {
                 loadingModal.close();
                 resolve();
-            }))
+            })).catch(() => {
+                loadingModal.close();
+                $uibModal.open({templateUrl: 'comp/errorModal.html'});
+            })
         };
     };
 

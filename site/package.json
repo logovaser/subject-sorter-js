@@ -22,5 +22,8 @@
     "file-loader": "latest",
     "webpack": "latest",
     "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
+  },
+  "dependencies": {
+    "ui-select": "^0.19.8"
   }
 }
