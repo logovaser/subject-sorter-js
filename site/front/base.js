@@ -1,108 +1,55 @@
 /**
- * Created by logov on 20-Oct-16.
+ * Created by logov on 19-May-17.
  */
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'ui-select/dist/select.css'
-import './fonts/Roboto-Regular.less'
 import './base.less'
-import './home.less'
+import './fonts/Roboto-Regular.less'
 
-import 'jquery'
-import 'bootstrap/dist/js/bootstrap'
 import angular from 'angular'
+import uiRouter from '@uirouter/angularjs'
 import 'angular-bootstrap-contextmenu/contextMenu'
-import modal from 'angular-ui-bootstrap'
+import uib from 'angular-ui-bootstrap'
 import uiSelect from 'ui-select'
 
+import Routes from './routes'
+
 import dataFactory from './dataFactory'
-import Schedule from './comp/Schedule'
-import Lesson from './comp/Lesson'
-import LessonPopup from './comp/LessonPopup'
 
-let subSortApp = angular.module('subSortApp', ['ui.bootstrap.contextMenu', modal, uiSelect]);
+import Schedule from './comp/schedule/base'
+import Lesson from './comp/lesson/base'
 
-subSortApp.factory('dataFactory', dataFactory);
+import LessonModal from './modal/lesson/base'
+import AddScheduleModal from './modal/addSchedule/base'
+import LoadingModal from './modal/loading/base'
+import ErrorModal from './modal/error/base'
 
-subSortApp.directive('schedule', Schedule);
-subSortApp.directive('lesson', Lesson);
+import Home from './page/home/base'
+import Settings from './page/settings/base'
+import Stats from './page/stats/base'
 
-subSortApp.controller('lessonPopupCtrl', LessonPopup);
+let app = angular.module('subjectSorterApp', [uiRouter, 'ui.bootstrap.contextMenu', uib, uiSelect]);
 
-subSortApp.controller('scheduleCtrl', ['$scope', '$http', 'dataFactory', '$uibModal', function ($scope, $http, dataFactory, $uibModal) {
+app.factory('dataFactory', dataFactory);
+// app.value('baseUrl', 'http://192.168.1.111:8088');
+app.value('baseUrl', 'http://747907a5.ngrok.io/app_dev.php');
 
-    $scope.tab = {
-        dt_start: '',
-        dt_end: '',
-        dt_new_sch: '',
-    };
-    $scope.days = dataFactory.getDays();
-    $scope.styles = {
-        schedules: {
-            zoom: '100%'
-        }
-    };
+app.directive('schedule', Schedule);
+app.directive('lesson', Lesson);
 
+app.component('lessonModal', LessonModal);
+app.component('addScheduleModal', AddScheduleModal);
+app.component('loadingModal', LoadingModal);
+app.component('errorModal', ErrorModal);
 
-    dataFactory.events.addEventListener('collectionChanged', () => {
-        $scope.days = dataFactory.getDays();
-    });
+app.component('homePage', Home);
+app.component('settingsPage', Settings);
+app.component('statsPage', Stats);
 
-    function addDays(date, days) {
-        let result = new Date(date);
-        result.setDate(result.getDate() + parseInt(days));
-        return new Date(result);
-    }
-
-    function getMonday(d) {
-        d = new Date(d);
-        let day = d.getDay(),
-            diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-        return new Date(d.setDate(diff));
-    }
-
-    $scope.loadSchedule = function (e) {
-        e.preventDefault();
-
-        let loadingModal = $uibModal.open({
-            templateUrl: 'comp/loadingModal.html',
-            backdrop: 'static',
-            keyboard: false
-        });
-
-        dataFactory.fetchDays(+$scope.tab.dt_start / 1000, +$scope.tab.dt_end / 1000)
-            .then(() => loadingModal.close())
-            .catch(() => {
-                loadingModal.close();
-                $uibModal.open({templateUrl: 'comp/errorModal.html'});
-            });
-    };
-
-    $scope.addSchedule = function () {
-        let selectedDate = new Date(+$scope.tab.dt_new_sch);
-        let startDate = getMonday(selectedDate);
-
-        dataFactory.checkIfHasLessons(+startDate / 1000, +addDays(startDate, 5) / 1000)
-            .then(() => {
-                dataFactory.delAllDays();
-
-                for (let i = 0; i < 6; i++) {
-                    let newDate = addDays(startDate, i);
-                    dataFactory.addDay(+newDate / 1000);
-                }
-                $scope.$apply()
-            }, () => {
-                alert('На ці дати вже було створено уроки. Скористайтесь пошуком.')
-            })
-            .catch(() => {
-                loadingModal.close();
-                $uibModal.open({templateUrl: 'comp/errorModal.html'});
-            });
-
-    };
-
-    $scope.addTab = function () {
-        window.open('/', '_blank')
-    };
-
+app.config(['$compileProvider', '$stateProvider', '$locationProvider', function ($compile, $state, $location) {
+    $location.hashPrefix('');
+    $location.html5Mode(true);
+    $compile.debugInfoEnabled(false);
+    Routes($state);
 }]);

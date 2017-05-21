@@ -2,9 +2,13 @@
  * Created by logov on 07-Mar-17.
  */
 
-import './schedule.less'
+import './base.less'
 import './schedule-table.less'
-import Helpers from '../helpers'
+import template from './base.html'
+
+import Loading from '../../modal/loading/setting'
+
+import Helpers from '../../helpers'
 
 export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
 
@@ -94,8 +98,7 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
         scope.menuOptions = [
             ['Редагувати', function ($itemScope, $event, modelValue, text, $li) {
                 lessonModal = $uibModal.open({
-                    templateUrl: 'comp/LessonPopup.html',
-                    controller: 'lessonPopupCtrl',
+                    component: 'lessonModal',
                     resolve: {lesson: () => $itemScope.item.lesson}
                 });
             }],
@@ -275,39 +278,38 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
 
         scope.btnSortClick = function () {
             scope.btnSaveClick().then(() => {
-                let loadingModal = $uibModal.open({
-                    templateUrl: 'comp/loadingModal.html',
-                    backdrop: 'static',
-                    keyboard: false
-                });
+                let loadingModal = $uibModal.open(Loading);
 
-                dataFactory.sortLessons(scope.date).then(() => {
-                    loadingModal.close();
-                    loadingModal.close();
-                }).catch(() => {
-                    $uibModal.open({templateUrl: 'comp/errorModal.html'});
-                })
+                dataFactory.sortLessons(scope.date)
+                    .then(
+                        () => {
+                            loadingModal.close();
+                        },
+                        () => {
+                            loadingModal.close();
+                            $uibModal.open({component: 'errorModal'});
+                        })
             })
         };
 
         scope.btnSaveClick = function () {
 
-            let loadingModal = $uibModal.open({
-                templateUrl: 'comp/loadingModal.html',
-                backdrop: 'static',
-                keyboard: false
-            });
+            let loadingModal = $uibModal.open(Loading);
 
             let promises = [];
             getAllLessonsFromGrid(scope.grid).forEach(lesson => promises.push(dataFactory.saveLesson(lesson)));
 
-            return new Promise(resolve => Promise.all(promises).then(() => {
-                loadingModal.close();
-                resolve();
-            })).catch(() => {
-                loadingModal.close();
-                $uibModal.open({templateUrl: 'comp/errorModal.html'});
-            })
+            return Promise.all(promises)
+                .then(
+                    res => {
+                        loadingModal.close();
+                        return res;
+                    },
+                    rej => {
+                        loadingModal.close();
+                        $uibModal.open({component: 'errorModal'});
+                        throw rej;
+                    });
         };
     };
 
@@ -317,6 +319,6 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
             date: '='
         },
         restrict: 'E',
-        templateUrl: 'comp/Schedule.html'
+        template
     }
 }]

@@ -1,29 +1,32 @@
 {
-  "name": "MyCoGa",
+  "name": "SubjectSorter",
   "version": "0.0.1",
-  "description": "MyCoGa web app",
-  "author": "Kiway",
+  "description": "Subject sorter web app",
+  "author": "logovaser",
   "contributors": [
     {
       "name": "Artem Prudnikov",
       "email": "a.prudnikov@kit-xxi.com.ua"
     }
   ],
-  "devDependencies": {
-    "jquery": "latest",
-    "bootstrap": "latest",
+  "dependencies": {
     "angular": "latest",
     "angular-ui-bootstrap": "latest",
+    "@uirouter/angularjs": "latest",
     "angular-bootstrap-contextmenu": "latest",
+    "bootstrap": "^3.3.7",
+    "ui-select": "^0.19.8"
+  },
+  "devDependencies": {
+    "bundle-loader": "latest",
     "css-loader": "latest",
+    "file-loader": "latest",
     "less": "latest",
     "less-loader": "latest",
+    "html-minify-loader": "latest",
+    "raw-loader": "latest",
     "style-loader": "latest",
-    "file-loader": "latest",
     "webpack": "latest",
     "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
-  },
-  "dependencies": {
-    "ui-select": "^0.19.8"
   }
 }

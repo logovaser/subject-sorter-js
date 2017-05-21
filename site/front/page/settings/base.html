@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Налаштування</title>
-</head>
-<body class="container" ng-app="subSortApp" ng-controller="settingsCtrl">
-
 <div class="panel panel-default">
     <div class="panel-heading">
         <b>Вчителі</b>
@@ -44,87 +36,106 @@
     </div>
 </div>
 
-<hr>
-
-<div>
-    <h2 class="pull-left">Предмети</h2>
-    <button class="btn btn-success pull-right" data-toggle="modal" data-target="#add-new-subject-modal">Додати
-        нового
-    </button>
+<br>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b>Предмети</b>
+        <button class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#add-new-subject-modal">Додати
+            нового
+        </button>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Назва</th>
+                <th width="120"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="subject in subjects">
+                <td>{{ subject.name }}</td>
+                <td>
+                    <button type="button" class="btn btn-default" disabled><span
+                            class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="delSubject(subject)">
+                        <span class="glyphicon glyphicon-trash"></span></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
-<table class="table">
-    <thead>
-    <tr>
-        <th>Назва</th>
-        <th width="120"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="subject in subjects">
-        <td>{{ subject.name }}</td>
-        <td>
-            <button type="button" class="btn btn-default" disabled><span class="glyphicon glyphicon-pencil"></span>
-            </button>
-            <button type="button" class="btn btn-danger" ng-click="delSubject(subject)" disabled>
-                <span class="glyphicon glyphicon-trash"></span></button>
-        </td>
-    </tr>
-    </tbody>
-</table>
 
-<div>
-    <h2 class="pull-left">Типи предметів</h2>
-    <button class="btn btn-success pull-right" data-toggle="modal" data-target="#add-new-lesson-type-modal">Додати
-        нового
-    </button>
-</div>
-<table class="table">
-    <thead>
-    <tr>
-        <th>Назва</th>
-        <th width="120"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="lesson_type in lesson_types">
-        <td>{{ lesson_type.name }}</td>
-        <td>
-            <button type="button" class="btn btn-default" disabled><span class="glyphicon glyphicon-pencil"></span>
-            </button>
-            <button type="button" class="btn btn-danger" ng-click="delTeacher(teacher)" disabled>
-                <span class="glyphicon glyphicon-trash"></span></button>
-        </td>
-    </tr>
-    </tbody>
-</table>
 
-<div>
-    <h2 class="pull-left">Взводи</h2>
-    <button class="btn btn-success pull-right" data-toggle="modal" data-target="#add-new-platoon-modal">Додати
-        нового
-    </button>
+<br>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b>Типи предметів</b>
+        <button class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#add-new-lesson-type-modal">Додати
+            нового
+        </button>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Назва</th>
+                <th width="120"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="lesson_type in lesson_types">
+                <td>{{ lesson_type.name }}</td>
+                <td>
+                    <button type="button" class="btn btn-default" disabled><span
+                            class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="delLessonType(teacher)">
+                        <span class="glyphicon glyphicon-trash"></span></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
-<table class="table">
-    <thead>
-    <tr>
-        <th>Номер</th>
-        <th>День</th>
-        <th width="120"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="platoon in platoons">
-        <td>{{ platoon.number }}</td>
-        <td>{{ platoon.study_day }}</td>
-        <td>
-            <button type="button" class="btn btn-default" disabled><span class="glyphicon glyphicon-pencil"></span>
-            </button>
-            <button type="button" class="btn btn-danger" ng-click="delTeacher(teacher)" disabled>
-                <span class="glyphicon glyphicon-trash"></span></button>
-        </td>
-    </tr>
-    </tbody>
-</table>
+
+<br>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b>Взводи</b>
+        <button class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#add-new-platoon-modal">Додати
+            нового
+        </button>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Номер</th>
+                <th>День</th>
+                <th width="120"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="platoon in platoons">
+                <td>{{ platoon.number }}</td>
+                <td>{{ platoon.study_day }}</td>
+                <td>
+                    <button type="button" class="btn btn-default" disabled><span
+                            class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="delPlatoon(teacher)">
+                        <span class="glyphicon glyphicon-trash"></span></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <div id="add-new-teacher-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -235,6 +246,3 @@
         </div>
     </div>
 </div>
-</body>
-<script src="/static/settings.js"></script>
-</html>

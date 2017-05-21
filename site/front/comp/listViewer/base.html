@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b>Вчителі</b>
+        <button class="btn btn-sm btn-success pull-right" ng-click="newItem()">
+            Додати нового {{ settings.name }}
+        </button>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th ng-repeat="(key, value) in settings.data">{{key}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in items">
+                <td ng-repeat="(key, value) in settings.data">{{ item[value] }}</td>
+                <td>
+                    <button type="button" class="btn btn-default" ng-click="editItem(teacher)">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="delItem(teacher)">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

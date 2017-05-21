@@ -7,9 +7,7 @@ const webpack = require('webpack'),
 
 module.exports = {
     entry: {
-        index: './front/base',
-        settings: './front/pages/settings/base',
-        stats: './front/pages/stats/base',
+        main: './front/base',
     },
     output: {
         path: path.join(__dirname, 'public/static'),
@@ -18,26 +16,40 @@ module.exports = {
     },
     devtool: 'source-map',
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify('development')
+                // NODE_ENV: JSON.stringify('production')
+            }
+        }),
         // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {warnings: false},
-        //     output: {comments: false},
-        //     sourceMap: true
-        // }),
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery",
-            "window.jQuery": "jquery"
-        })
+        //     // compress: {warnings: true},
+        //     comments: false,
+        //     // sourceMap: true
+        // })
     ],
     module: {
         rules: [
             {
-                test: /\.less$/,
-                use: ['style-loader', 'css-loader', 'less-loader']
+                test: /\.css$/,
+                use: ['style-loader', {
+                    loader: 'css-loader',
+                    // options: {minimize: true}
+                }]
             },
             {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                test: /\.less$/,
+                use: ['style-loader', {
+                    loader: 'css-loader',
+                    // options: {minimize: true}
+                }, 'less-loader']
+            },
+            {
+                test: /\.(html)$/,
+                use: [
+                    'raw-loader',
+                    // 'html-minify-loader'
+                ]
             },
             {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,

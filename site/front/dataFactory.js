@@ -2,12 +2,10 @@
  * Created by logov on 12-Mar-17.
  */
 
+import Loading from './modal/loading/setting'
 import Helpers from './helpers'
 
-export default ['$http', '$uibModal', function ($http, $uibModal) {
-
-    // let baseUrl = 'http://192.168.1.111:8088';
-    let baseUrl = 'http://8c0bf3d5.ngrok.io/app.php';
+export default ['$http', '$uibModal', 'baseUrl', function ($http, $uibModal, baseUrl) {
 
     let data = {
         teachers: [],
@@ -56,8 +54,8 @@ export default ['$http', '$uibModal', function ($http, $uibModal) {
 
     function checkIfHasLessons(startDate, endDate) {
         let url = '';
-        if (arguments.length == 1) url = `${baseUrl}/lessons?on_date=${startDate}`;
-        else if (arguments.length == 2) url = `${baseUrl}/lessons?from_date=${startDate}&to_date=${endDate}`;
+        if (arguments.length === 1) url = `${baseUrl}/lessons?on_date=${startDate}`;
+        else if (arguments.length === 2) url = `${baseUrl}/lessons?from_date=${startDate}&to_date=${endDate}`;
         else return;
 
         return new Promise((resolve, reject) => {
@@ -78,11 +76,7 @@ export default ['$http', '$uibModal', function ($http, $uibModal) {
     }
 
     function initLists() {
-        let loadingModal = $uibModal.open({
-            templateUrl: 'comp/loadingModal.html',
-            backdrop: 'static',
-            keyboard: false
-        });
+        let loadingModal = $uibModal.open(Loading);
 
         let promises = [
             getList('subjects'),
