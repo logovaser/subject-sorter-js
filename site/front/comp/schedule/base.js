@@ -110,9 +110,7 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
                 pasteIntoSelectedLesson(scope.grid, dataFactory.getBuffer())
             }],
             ['Видалити', function ($itemScope, $event, modelValue, text, $li) {
-                if (confirm('Ви впевнені?')) {
-                    scope.delLesson($itemScope.item.lesson)
-                }
+                scope.delLesson($itemScope.item.lesson)
             }],
         ];
 
@@ -176,18 +174,23 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
             scope.date_show = newDate.toLocaleDateString('ru');
         });
 
-        dataFactory.events.addEventListener('collectionChanged', () => {
+        let onCollectionChanged = function () {
             console.log('initGrid on collectionChanged');
             initGrid();
-        });
+        };
 
-        dataFactory.events.addEventListener('selectionChanged', () => {
+        let onSelectionChanged = function () {
+            console.log('initGrid on selectionChanged');
             clearSelection(scope.grid);
-        });
+        };
+
+        dataFactory.events.addEventListener('collectionChanged', onCollectionChanged);
+
+        dataFactory.events.addEventListener('selectionChanged', onSelectionChanged);
 
         initGrid();
 
-        document.addEventListener('keydown', function (e) {
+        let onKeyDown = function (e) {
             if (e.ctrlKey) {
                 switch (e.keyCode) {
                     case 67:
@@ -216,7 +219,9 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
                 }
             }
             scope.$apply();
-        });
+        };
+
+        document.addEventListener('keydown', onKeyDown);
 
         scope.lessonClick = function (item) {
             dataFactory.clearSelection();
@@ -224,7 +229,12 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
         };
 
         scope.addPair = function () {
-            if (scope.pairs.includes(scope.pairToAdd)) alert('Ця пара вже додана');
+            if (scope.pairs.includes(scope.pairToAdd)) $uibModal.open({
+                component: 'errorModal',
+                resolve:{
+                    text: () => 'Ця пара вже додана'
+                }
+            });
             else if (scope.pairToAdd) {
                 scope.pairs.push(scope.pairToAdd);
                 initGrid();
@@ -232,7 +242,12 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
         };
 
         scope.addPlatoon = function () {
-            if (scope.platoons.includes(scope.platoonToAdd)) alert('Цей взвод вже доданий');
+            if (scope.platoons.includes(scope.platoonToAdd)) $uibModal.open({
+                component: 'errorModal',
+                resolve:{
+                    text: () => 'Цей взвод вже доданий'
+                }
+            });
             else if (scope.platoonToAdd) {
                 scope.platoons.push(scope.platoonToAdd);
                 initGrid();
@@ -311,6 +326,12 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
                         throw rej;
                     });
         };
+
+        scope.$on('$destroy', function() {
+            dataFactory.events.removeEventListener('collectionChanged', onCollectionChanged);
+            dataFactory.events.removeEventListener('selectionChanged', onSelectionChanged);
+            document.removeEventListener('keydown', onKeyDown);
+        });
     };
 
     return {

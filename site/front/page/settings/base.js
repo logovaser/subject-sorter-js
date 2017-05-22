@@ -38,40 +38,37 @@ export default {
 
         Promise.all(promises).then(() => loadingModal.close());
 
-        $scope.addNewTeacher = function () {
-            let loadingModal = $uibModal.open(Loading);
-            let data = angular.copy($scope.teacher);
-            data.methodical_day = {day: data.methodical_day};
-            data.subjects = data.subjects.map(subject => ({id: subject.id}));
 
-            console.log(data);
-
-            $http.post(`${baseUrl}/teachers/add`, data).then(res => {
-                loadingModal.close();
-            }).catch(() => {
-                loadingModal.close();
-                $uibModal.open({component:'errorModal'});
-            })
-        };
-
-        $scope.addNewLessonType = function () {
-            let loadingModal = $uibModal.open(Loading);
-            $http.post(`${baseUrl}/lessons/types/add`, $scope.subjectType).then(res => {
-                loadingModal.close();
-            }).catch(() => {
-                loadingModal.close();
-                $uibModal.open({component:'errorModal'});
-            })
-        };
-
-        $scope.addNew = function (type) {
-            let loadingModal = $uibModal.open(Loading);
-            $http.post(`${baseUrl}/${type}s/add`, $scope[type]).then(() => {
-                loadingModal.close();
-            }).catch(() => {
-                loadingModal.close();
-                $uibModal.open({component:'errorModal'});
-            })
+        $scope.addItem = function (type) {
+            switch (type) {
+                case 'teacher':
+                    $uibModal.open({
+                        component: 'addTeacherModal',
+                        resolve: {
+                            subjects: () => $scope.subjects,
+                            weekdays: () => $scope.weekdays
+                        }
+                    });
+                    break;
+                case 'subject':
+                    $uibModal.open({
+                        component: 'addSubjectModal'
+                    });
+                    break;
+                case 'lesson_type':
+                    $uibModal.open({
+                        component: 'addLessonTypeModal'
+                    });
+                    break;
+                case 'platoon':
+                    $uibModal.open({
+                        component: 'addPlatoonModal',
+                        resolve: {
+                            weekdays: () => $scope.weekdays
+                        }
+                    });
+                    break;
+            }
         };
 
         $scope.delTeacher = function (teacher) {
@@ -81,40 +78,40 @@ export default {
                 loadingModal.close();
             }).catch(() => {
                 loadingModal.close();
-                $uibModal.open({component:'errorModal'});
+                $uibModal.open({component: 'errorModal'});
             })
         };
 
-        $scope.delSubject = function (teacher) {
+        $scope.delSubject = function (subject) {
             let loadingModal = $uibModal.open(Loading);
-            $http.delete(`${baseUrl}/subjects/remove/${teacher.id}`).then(() => {
-                $scope.teachers.splice($scope.teachers.indexOf(teacher), 1);
+            $http.delete(`${baseUrl}/subjects/remove/${subject.id}`).then(() => {
+                $scope.subjects.splice($scope.subjects.indexOf(subject), 1);
                 loadingModal.close();
             }).catch(() => {
                 loadingModal.close();
-                $uibModal.open({component:'errorModal'});
+                $uibModal.open({component: 'errorModal'});
             })
         };
 
-        $scope.delLessonType = function (teacher) {
+        $scope.delLessonType = function (lesson_type) {
             let loadingModal = $uibModal.open(Loading);
-            $http.delete(`${baseUrl}/lessons/types/remove/${teacher.id}`).then(() => {
-                $scope.teachers.splice($scope.teachers.indexOf(teacher), 1);
+            $http.delete(`${baseUrl}/lessons/types/remove/${lesson_type.id}`).then(() => {
+                $scope.lesson_types.splice($scope.lesson_types.indexOf(lesson_type), 1);
                 loadingModal.close();
             }).catch(() => {
                 loadingModal.close();
-                $uibModal.open({component:'errorModal'});
+                $uibModal.open({component: 'errorModal'});
             })
         };
 
-        $scope.delPlatoon = function (teacher) {
+        $scope.delPlatoon = function (platoon) {
             let loadingModal = $uibModal.open(Loading);
-            $http.delete(`${baseUrl}/platoons/remove/${teacher.id}`).then(() => {
-                $scope.teachers.splice($scope.teachers.indexOf(teacher), 1);
+            $http.delete(`${baseUrl}/platoons/remove/${platoon.id}`).then(() => {
+                $scope.platoons.splice($scope.platoons.indexOf(platoon), 1);
                 loadingModal.close();
             }).catch(() => {
                 loadingModal.close();
-                $uibModal.open({component:'errorModal'});
+                $uibModal.open({component: 'errorModal'});
             })
         };
 

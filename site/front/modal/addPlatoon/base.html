@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="$ctrl.cancel()">&times;</button>
+</div>
+<div class="modal-body">
+    <form ng-submit="submit($event)">
+        <h1>Додати новий взвод</h1>
+        <div class="form-group">
+            <label for="platoon_number">Номер</label>
+            <input type="number" id="platoon_number" name="number" class="form-control"
+                   ng-model="form.number">
+        </div>
+        <div class="form-group">
+            <label for="platoon_study_day">День навчання</label>
+            <select id="platoon_study_day" class="form-control" ng-model="form.study_day">
+                <option ng-repeat="day in $ctrl.resolve.weekdays" ng-bind="day.name" ng-value="day.alias"></option>
+            </select>
+        </div>
+        <button class="btn btn-success">Додати</button>
+    </form>
+</div>

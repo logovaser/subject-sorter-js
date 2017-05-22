@@ -9,7 +9,7 @@
                 <label for="sch-date-end">до</label>
                 <input id="sch-date-end" class="form-control" type="date" ng-model="tab.dt_end">
             </div>
-            <button class="btn btn-default">Завантажити</button>
+            <button class="btn btn-success">Завантажити</button>
         </form>
         <div class="separator"></div>
         <a href="http://8c0bf3d5.ngrok.io/app.php/subjects/excel" target="_blank" class="btn btn-default">Excel</a>
@@ -26,13 +26,13 @@
         </form>
     </div>
     <div class="nav">
-        <button type="button" class="btn btn-default" ng-click="addSchedule()">
+        <button type="button" class="btn btn-success" ng-click="addSchedule()">
             Створити новий розклад
         </button>
         <div class="separator"></div>
         <button type="button" class="btn btn-default" ng-click="addTab()">Додати вкладку</button>
         <div class="separator"></div>
-        <a ui-sref="stats" class="btn btn-info">Статистика</a>
+        <a href="{{baseUrl}}/statistic/full" class="btn btn-info">Статистика</a>
         <div class="separator"></div>
         <a ui-sref="settings" class="btn btn-warning">Налаштування</a>
     </div>

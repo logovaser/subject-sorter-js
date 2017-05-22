@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="$ctrl.cancel()">&times;</button>
+</div>
+<div class="modal-body">
+    <form ng-submit="submit($event)">
+        <h1>Додати нового вчителя</h1>
+        <div class="form-group">
+            <label for="surname">Прізвище</label>
+            <input id="surname" class="form-control" ng-model="form.surname">
+        </div>
+        <div class="form-group">
+            <label for="first_name">Ім'я</label>
+            <input id="first_name" class="form-control" ng-model="form.first_name">
+        </div>
+        <div class="form-group">
+            <label for="middle_name">По-батькові</label>
+            <input id="middle_name" class="form-control" ng-model="form.middle_name">
+        </div>
+        <div class="form-group">
+            <label for="methodical_day">Методичний день</label>
+            <select id="methodical_day" class="form-control" ng-model="form.methodical_day">
+                <option ng-repeat="day in $ctrl.resolve.weekdays" ng-bind="day.name" ng-value="day.alias"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="subjects">Предмети</label>
+            <ui-select id="subjects" multiple ng-model="form.subjects" theme="bootstrap">
+                <ui-select-match placeholder="Виберіть предмети...">{{$item.name}}</ui-select-match>
+                <ui-select-choices repeat="subject in $ctrl.resolve.subjects | filter:$select.search"
+                                   ng-value="subject">{{subject.name}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <button class="btn btn-success">Додати</button>
+    </form>
+</div>

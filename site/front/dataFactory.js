@@ -5,6 +5,12 @@
 import Loading from './modal/loading/setting'
 import Helpers from './helpers'
 
+function addMissingDays(days, startDate, endDate) {
+    for (let i = startDate; i <= endDate; i += 86400) {
+        if (!days.find(day => day.date == i)) days.push({date: i, lessons: []})
+    }
+}
+
 export default ['$http', '$uibModal', 'baseUrl', function ($http, $uibModal, baseUrl) {
 
     let data = {
@@ -48,6 +54,7 @@ export default ['$http', '$uibModal', 'baseUrl', function ($http, $uibModal, bas
         return $http.get(url).then(jsonData => {
             jsonData.data.forEach(day => day.date);
             angular.copy(jsonData.data, data.days);
+            addMissingDays(data.days, startDate, endDate);
             events.dispatchEvent(onCollectionChanged);
         });
     }

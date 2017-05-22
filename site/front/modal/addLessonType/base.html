@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="$ctrl.cancel()">&times;</button>
+</div>
+<div class="modal-body">
+    <form ng-submit="submit($event)">
+        <h1>Додати новий тип предмета</h1>
+        <div class="form-group">
+            <label for="subjectType_name">Назва</label>
+            <input id="subjectType_name" class="form-control" ng-model="form.name">
+        </div>
+        <button class="btn btn-success">Додати</button>
+    </form>
+</div>

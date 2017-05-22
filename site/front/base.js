@@ -22,6 +22,10 @@ import Lesson from './comp/lesson/base'
 
 import LessonModal from './modal/lesson/base'
 import AddScheduleModal from './modal/addSchedule/base'
+import AddTeacher from './modal/addTeacher/base'
+import AddSubject from './modal/addSubject/base'
+import AddLessonType from './modal/addLessonType/base'
+import AddPlatoon from './modal/addPlatoon/base'
 import LoadingModal from './modal/loading/base'
 import ErrorModal from './modal/error/base'
 
@@ -33,7 +37,7 @@ let app = angular.module('subjectSorterApp', [uiRouter, 'ui.bootstrap.contextMen
 
 app.factory('dataFactory', dataFactory);
 // app.value('baseUrl', 'http://192.168.1.111:8088');
-app.value('baseUrl', 'http://747907a5.ngrok.io/app_dev.php');
+app.value('baseUrl', 'http://b4272df3.ngrok.io/app_dev.php');
 
 app.directive('schedule', Schedule);
 app.directive('lesson', Lesson);
@@ -42,6 +46,10 @@ app.component('lessonModal', LessonModal);
 app.component('addScheduleModal', AddScheduleModal);
 app.component('loadingModal', LoadingModal);
 app.component('errorModal', ErrorModal);
+app.component('addTeacherModal', AddTeacher);
+app.component('addSubjectModal', AddSubject);
+app.component('addLessonTypeModal', AddLessonType);
+app.component('addPlatoonModal', AddPlatoon);
 
 app.component('homePage', Home);
 app.component('settingsPage', Settings);
@@ -50,6 +58,6 @@ app.component('statsPage', Stats);
 app.config(['$compileProvider', '$stateProvider', '$locationProvider', function ($compile, $state, $location) {
     $location.hashPrefix('');
     $location.html5Mode(true);
-    $compile.debugInfoEnabled(false);
+    // $compile.debugInfoEnabled(false);
     Routes($state);
 }]);

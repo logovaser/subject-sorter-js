@@ -1,12 +1,12 @@
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <button type="button" class="close" ng-click="$ctrl.cancel()">&times;</button>
 </div>
 <div class="modal-body">
-    <form ng-submit="submit()">
+    <form ng-submit="submit($event)">
         <h1>Додати новий предмет</h1>
         <div class="form-group">
             <label for="subject_name">Назва</label>
-            <input id="subject_name" name="name" class="form-control" ng-model="subject.name">
+            <input id="subject_name" name="name" class="form-control" ng-model="form.name">
         </div>
         <button class="btn btn-success">Додати</button>
     </form>

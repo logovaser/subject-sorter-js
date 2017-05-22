@@ -9,7 +9,7 @@ import Loading from '../../modal/loading/setting'
 
 export default {
     template,
-    controller: ['$scope', '$http', 'dataFactory', '$uibModal', function ($scope, $http, dataFactory, $uibModal) {
+    controller: ['$scope', '$http', 'dataFactory', '$uibModal', 'baseUrl', function ($scope, $http, dataFactory, $uibModal, baseUrl) {
 
         $scope.tab = {
             dt_start: '',
@@ -22,6 +22,7 @@ export default {
                 zoom: '100%'
             }
         };
+        $scope.baseUrl = baseUrl;
 
 
         dataFactory.events.addEventListener('collectionChanged', () => {

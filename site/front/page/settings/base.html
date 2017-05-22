@@ -1,9 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <b>Вчителі</b>
-        <button class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#add-new-teacher-modal">
-            Додати нового
-        </button>
+        <button class="btn btn-sm btn-success pull-right" ng-click="addItem('teacher')">Додати нового</button>
     </div>
     <div class="panel-body">
         <table class="table">
@@ -14,7 +12,7 @@
                 <th>По батькові</th>
                 <th>Метод. день</th>
                 <th>Предмети</th>
-                <th width="120"></th>
+                <th width="60"></th>
             </tr>
             </thead>
             <tbody>
@@ -25,8 +23,6 @@
                 <td>{{ teacher.methodical_day }}</td>
                 <td><span ng-repeat="subject in subjects">{{ subject.name }}, </span></td>
                 <td>
-                    <button type="button" class="btn btn-default" disabled><span
-                            class="glyphicon glyphicon-pencil"></span></button>
                     <button type="button" class="btn btn-danger" ng-click="delTeacher(teacher)">
                         <span class="glyphicon glyphicon-trash"></span></button>
                 </td>
@@ -37,28 +33,24 @@
 </div>
 
 <br>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <b>Предмети</b>
-        <button class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#add-new-subject-modal">Додати
-            нового
-        </button>
+        <button class="btn btn-sm btn-success pull-right" ng-click="addItem('subject')">Додати нового</button>
     </div>
     <div class="panel-body">
         <table class="table">
             <thead>
             <tr>
                 <th>Назва</th>
-                <th width="120"></th>
+                <th width="60"></th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="subject in subjects">
                 <td>{{ subject.name }}</td>
                 <td>
-                    <button type="button" class="btn btn-default" disabled><span
-                            class="glyphicon glyphicon-pencil"></span>
-                    </button>
                     <button type="button" class="btn btn-danger" ng-click="delSubject(subject)">
                         <span class="glyphicon glyphicon-trash"></span></button>
                 </td>
@@ -74,26 +66,21 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <b>Типи предметів</b>
-        <button class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#add-new-lesson-type-modal">Додати
-            нового
-        </button>
+        <button class="btn btn-sm btn-success pull-right" ng-click="addItem('lesson_type')">Додати нового</button>
     </div>
     <div class="panel-body">
         <table class="table">
             <thead>
             <tr>
                 <th>Назва</th>
-                <th width="120"></th>
+                <th width="60"></th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="lesson_type in lesson_types">
                 <td>{{ lesson_type.name }}</td>
                 <td>
-                    <button type="button" class="btn btn-default" disabled><span
-                            class="glyphicon glyphicon-pencil"></span>
-                    </button>
-                    <button type="button" class="btn btn-danger" ng-click="delLessonType(teacher)">
+                    <button type="button" class="btn btn-danger" ng-click="delLessonType(lesson_type)">
                         <span class="glyphicon glyphicon-trash"></span></button>
                 </td>
             </tr>
@@ -107,9 +94,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <b>Взводи</b>
-        <button class="btn btn-sm btn-success pull-right" data-toggle="modal" data-target="#add-new-platoon-modal">Додати
-            нового
-        </button>
+        <button class="btn btn-sm btn-success pull-right" ng-click="addItem('platoon')">Додати нового</button>
     </div>
     <div class="panel-body">
         <table class="table">
@@ -117,7 +102,7 @@
             <tr>
                 <th>Номер</th>
                 <th>День</th>
-                <th width="120"></th>
+                <th width="60"></th>
             </tr>
             </thead>
             <tbody>
@@ -125,124 +110,11 @@
                 <td>{{ platoon.number }}</td>
                 <td>{{ platoon.study_day }}</td>
                 <td>
-                    <button type="button" class="btn btn-default" disabled><span
-                            class="glyphicon glyphicon-pencil"></span>
-                    </button>
-                    <button type="button" class="btn btn-danger" ng-click="delPlatoon(teacher)">
+                    <button type="button" class="btn btn-danger" ng-click="delPlatoon(platoon)">
                         <span class="glyphicon glyphicon-trash"></span></button>
                 </td>
             </tr>
             </tbody>
         </table>
-    </div>
-</div>
-
-<div id="add-new-teacher-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form ng-submit="addNewTeacher()">
-                    <h1>Додати нового вчителя</h1>
-                    <div class="form-group">
-                        <label for="surname">Прізвище</label>
-                        <input id="surname" class="form-control" ng-model="teacher.surname">
-                    </div>
-                    <div class="form-group">
-                        <label for="first_name">Ім'я</label>
-                        <input id="first_name" class="form-control" ng-model="teacher.first_name">
-                    </div>
-                    <div class="form-group">
-                        <label for="middle_name">По-батькові</label>
-                        <input id="middle_name" class="form-control" ng-model="teacher.middle_name">
-                    </div>
-                    <div class="form-group">
-                        <label for="methodical_day">Методичний день</label>
-                        <select id="methodical_day" class="form-control" ng-model="teacher.methodical_day">
-                            <option ng-repeat="day in weekdays" ng-bind="day.name" ng-value="day.alias"></option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="subjects">Предмети</label>
-                        <ui-select id="subjects" multiple ng-model="teacher.subjects" theme="bootstrap">
-                            <ui-select-match placeholder="Виберіть предмети...">{{$item.name}}</ui-select-match>
-                            <ui-select-choices repeat="subject in subjects | filter:$select.search"
-                                               ng-value="subject">{{subject.name}}
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                    <button class="btn btn-success">Додати</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="add-new-subject-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form ng-submit="addNew('subject')">
-                    <h1>Додати новий предмет</h1>
-                    <div class="form-group">
-                        <label for="subject_name">Назва</label>
-                        <input id="subject_name" name="name" class="form-control" ng-model="subject.name">
-                    </div>
-                    <button class="btn btn-success">Додати</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="add-new-lesson-type-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form ng-submit="addNewLessonType()">
-                    <h1>Додати новий тип предмета</h1>
-                    <div class="form-group">
-                        <label for="subjectType_name">Назва</label>
-                        <input id="subjectType_name" name="name" class="form-control" ng-model="subjectType.name">
-                    </div>
-                    <button class="btn btn-success">Додати</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="add-new-platoon-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form ng-submit="addNew('platoon')">
-                    <h1>Додати новий взвод</h1>
-                    <div class="form-group">
-                        <label for="platoon_number">Номер</label>
-                        <input type="number" id="platoon_number" name="number" class="form-control"
-                               ng-model="platoon.number">
-                    </div>
-                    <div class="form-group">
-                        <label for="platoon_study_day">День навчання</label>
-                        <select id="platoon_study_day" class="form-control" ng-model="platoon.study_day">
-                            <option ng-repeat="day in weekdays" ng-bind="day.name" ng-value="day.alias"></option>
-                        </select>
-                    </div>
-                    <button class="btn btn-success">Додати</button>
-                </form>
-            </div>
-        </div>
     </div>
 </div>
