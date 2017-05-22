@@ -83,13 +83,25 @@ export default {
                     })
                     .catch(() => {
                         loadingModal.close();
-                        $uibModal.open({component:'errorModal'});
+                        $uibModal.open({component: 'errorModal'});
                     });
             });
         };
 
         $scope.addTab = function () {
             window.open('/', '_blank')
+        };
+
+        window.onbeforeunload = function () {
+            return 'Ви впевнені, що хочете закрити розклад? Незбережені змни буде втрачено'
+        };
+
+        $scope.saveAll = function () {
+            $scope.$broadcast('onSaveAllClick');
+        };
+
+        $scope.sortAll = function () {
+            $scope.$broadcast('onSortAllClick');
         };
 
     }]

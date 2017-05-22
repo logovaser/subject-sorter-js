@@ -151,7 +151,12 @@ export default ['$http', '$uibModal', 'baseUrl', function ($http, $uibModal, bas
     }
 
     function delLesson(lesson) {
-        $http.delete(`${baseUrl}/lessons/remove/${lesson.id}`);
+        return $http.delete(`${baseUrl}/lessons/remove/${lesson.id}`)
+            .then(
+                () => data.days.forEach(day => Helpers.remove(day.lessons, day.lessons.find(les => les === lesson))),
+                rej => {
+                    throw rej
+                });
     }
 
     function delDay(date) {

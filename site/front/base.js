@@ -42,10 +42,10 @@ app.value('baseUrl', 'http://b4272df3.ngrok.io/app_dev.php');
 app.directive('schedule', Schedule);
 app.directive('lesson', Lesson);
 
-app.component('lessonModal', LessonModal);
-app.component('addScheduleModal', AddScheduleModal);
 app.component('loadingModal', LoadingModal);
 app.component('errorModal', ErrorModal);
+app.component('lessonModal', LessonModal);
+app.component('addScheduleModal', AddScheduleModal);
 app.component('addTeacherModal', AddTeacher);
 app.component('addSubjectModal', AddSubject);
 app.component('addLessonTypeModal', AddLessonType);

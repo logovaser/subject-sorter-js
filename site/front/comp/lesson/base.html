@@ -3,8 +3,10 @@
     <div ng-bind="lesson.topic"></div>
     <div ng-bind="lesson.type.name"></div>
     <div><span ng-repeat="teacher in lesson.teachers">
-        <span ng-show="lesson.actual_teacher.surname !== teacher.surname">{{ teacher.surname }}</span>
         <b ng-show="lesson.actual_teacher.surname === teacher.surname">{{ lesson.actual_teacher.surname }}</b>
+    </span></div>
+    <div><span ng-repeat="teacher in lesson.teachers">
+        <span ng-show="lesson.actual_teacher.surname !== teacher.surname">{{ teacher.surname }}</span>
     </span></div>
     <div ng-bind="lesson.room"></div>
 </div>

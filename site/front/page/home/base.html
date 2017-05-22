@@ -11,9 +11,9 @@
             </div>
             <button class="btn btn-success">Завантажити</button>
         </form>
+
         <div class="separator"></div>
-        <a href="http://8c0bf3d5.ngrok.io/app.php/subjects/excel" target="_blank" class="btn btn-default">Excel</a>
-        <div class="separator"></div>
+
         <form class="form-inline">
             <div class="form-group">
                 <select class="form-control" ng-model="styles.schedules.zoom">
@@ -24,17 +24,26 @@
                 </select>
             </div>
         </form>
-    </div>
-    <div class="nav">
-        <button type="button" class="btn btn-success" ng-click="addSchedule()">
-            Створити новий розклад
-        </button>
+
         <div class="separator"></div>
-        <button type="button" class="btn btn-default" ng-click="addTab()">Додати вкладку</button>
+
+        <div>
+            <button type="button" class="btn btn-success" ng-click="addSchedule()">
+                Створити новий розклад
+            </button>
+            <button type="button" class="btn btn-default" ng-click="addTab()">Додати вкладку</button>
+            <a ui-sref="settings" class="btn btn-warning">Налаштування</a>
+        </div>
+
         <div class="separator"></div>
-        <a href="{{baseUrl}}/statistic/full" class="btn btn-info">Статистика</a>
-        <div class="separator"></div>
-        <a ui-sref="settings" class="btn btn-warning">Налаштування</a>
+
+        <div>
+            <a href="{{baseUrl}}/subjects/excel" target="_blank" class="btn btn-default">Експорт в Excel</a>
+            <a href="{{baseUrl}}/statistic/full" target="_blank" class="btn btn-info" ng-click="downloadStats($event)">Статистика в
+                Excel</a>
+            <button type="button" class="btn btn-success" ng-click="saveAll()">Зберегти все</button>
+            <button type="button" class="btn btn-warning" ng-click="sortAll()">Сортувати все</button>
+        </div>
     </div>
 </div>
 

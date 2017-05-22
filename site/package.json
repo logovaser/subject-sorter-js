@@ -10,23 +10,22 @@
     }
   ],
   "dependencies": {
-    "angular": "latest",
-    "angular-ui-bootstrap": "latest",
-    "@uirouter/angularjs": "latest",
-    "angular-bootstrap-contextmenu": "latest",
-    "bootstrap": "^3.3.7",
-    "ui-select": "^0.19.8"
+    "angular": "1.6.4",
+    "angular-ui-bootstrap": "2.5.0",
+    "@uirouter/angularjs": "1.0.3",
+    "angular-bootstrap-contextmenu": "0.9.9",
+    "bootstrap": "3.3.7",
+    "ui-select": "0.19.8"
   },
   "devDependencies": {
-    "bundle-loader": "latest",
-    "css-loader": "latest",
-    "file-loader": "latest",
-    "less": "latest",
-    "less-loader": "latest",
-    "html-minify-loader": "latest",
-    "raw-loader": "latest",
-    "style-loader": "latest",
-    "webpack": "latest",
+    "css-loader": "0.28.2",
+    "file-loader": "0.11.1",
+    "less": "2.7.2",
+    "less-loader": "4.0.3",
+    "html-minify-loader": "1.1.0",
+    "raw-loader": "0.5.1",
+    "style-loader": "0.18.0",
+    "webpack": "2.5.1",
     "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
   }
 }

@@ -231,7 +231,7 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
         scope.addPair = function () {
             if (scope.pairs.includes(scope.pairToAdd)) $uibModal.open({
                 component: 'errorModal',
-                resolve:{
+                resolve: {
                     text: () => 'Ця пара вже додана'
                 }
             });
@@ -244,7 +244,7 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
         scope.addPlatoon = function () {
             if (scope.platoons.includes(scope.platoonToAdd)) $uibModal.open({
                 component: 'errorModal',
-                resolve:{
+                resolve: {
                     text: () => 'Цей взвод вже доданий'
                 }
             });
@@ -255,9 +255,18 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
         };
 
         scope.delPair = function (pair) {
+            let loadingModal = $uibModal.open(Loading);
             scope.grid.forEach(row => {
                 row.lessons.forEach(item => {
-                    if (item.lesson.number == pair) dataFactory.delLesson(item.lesson)
+                    if (item.lesson.number == pair) dataFactory.delLesson(item.lesson).then(
+                        res => {
+                            loadingModal.close();
+                            return res;
+                        },
+                        rej => {
+                            loadingModal.close();
+                            $uibModal.open({component: 'errorModal'});
+                        });
                 })
             });
             Helpers.remove(scope.pairs, pair);
@@ -265,10 +274,19 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
         };
 
         scope.delPlatoon = function (platoon) {
+            let loadingModal = $uibModal.open(Loading);
             scope.grid.forEach(row => {
                 row.lessons.forEach(item => {
                     if (item.lesson.platoons.find(plat => plat.number == platoon.number)) {
-                        dataFactory.delLesson(item.lesson)
+                        dataFactory.delLesson(item.lesson).then(
+                            res => {
+                                loadingModal.close();
+                                return res;
+                            },
+                            rej => {
+                                loadingModal.close();
+                                $uibModal.open({component: 'errorModal'});
+                            });
                     }
                 })
             });
@@ -291,22 +309,6 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
             angular.copy(tempLesson, lesson);
         };
 
-        scope.btnSortClick = function () {
-            scope.btnSaveClick().then(() => {
-                let loadingModal = $uibModal.open(Loading);
-
-                dataFactory.sortLessons(scope.date)
-                    .then(
-                        () => {
-                            loadingModal.close();
-                        },
-                        () => {
-                            loadingModal.close();
-                            $uibModal.open({component: 'errorModal'});
-                        })
-            })
-        };
-
         scope.btnSaveClick = function () {
 
             let loadingModal = $uibModal.open(Loading);
@@ -327,7 +329,25 @@ export default ['dataFactory', '$uibModal', function (dataFactory, $uibModal) {
                     });
         };
 
-        scope.$on('$destroy', function() {
+        scope.btnSortClick = function () {
+            scope.btnSaveClick().then(() => {
+                let loadingModal = $uibModal.open(Loading);
+
+                dataFactory.sortLessons(scope.date)
+                    .then(
+                        () => {
+                            loadingModal.close();
+                        },
+                        () => {
+                            loadingModal.close();
+                            $uibModal.open({component: 'errorModal'});
+                        })
+            })
+        };
+
+        scope.$on('onSortAllClick', scope.btnSortClick);
+
+        scope.$on('$destroy', function () {
             dataFactory.events.removeEventListener('collectionChanged', onCollectionChanged);
             dataFactory.events.removeEventListener('selectionChanged', onSelectionChanged);
             document.removeEventListener('keydown', onKeyDown);
